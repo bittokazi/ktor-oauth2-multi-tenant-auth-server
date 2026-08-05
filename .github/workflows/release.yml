@@ -116,6 +116,11 @@ jobs:
           name: gateway-${{ github.event.release.tag_name }}.jar
           path: .
 
+      - name: Rename Release JARs
+        run: |
+          mv backend-all.jar backend-${{ github.event.release.tag_name }}.jar
+          mv gateway-all.jar gateway-${{ github.event.release.tag_name }}.jar
+
       - name: Log into Docker Registry
         uses: docker/login-action@v2
         with:
