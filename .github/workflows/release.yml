@@ -5,6 +5,10 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+  actions: write
+
 jobs:
   build:
     name: Build Services ${{ github.event.release.tag_name }}
