@@ -2,7 +2,8 @@ package ktor.oauth2.multi.tenant.auth.server.security.config
 
 import com.bittokazi.ktor.auth.utils.getBaseUrl
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.*
+import io.ktor.server.application.ApplicationPlugin
+import io.ktor.server.application.createApplicationPlugin
 import io.ktor.server.request.header
 import io.ktor.server.response.respond
 import io.ktor.util.AttributeKey

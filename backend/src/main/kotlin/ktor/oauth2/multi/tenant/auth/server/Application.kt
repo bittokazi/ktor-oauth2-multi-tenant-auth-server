@@ -1,6 +1,6 @@
 package ktor.oauth2.multi.tenant.auth.server
 
-import io.ktor.server.application.*
+import io.ktor.server.application.Application
 import io.ktor.server.netty.EngineMain
 import ktor.oauth2.multi.tenant.auth.server.app.configureAppModule
 import ktor.oauth2.multi.tenant.auth.server.clients.configureClientModule

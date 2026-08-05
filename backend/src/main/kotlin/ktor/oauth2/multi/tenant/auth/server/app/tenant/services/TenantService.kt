@@ -1,6 +1,6 @@
 package ktor.oauth2.multi.tenant.auth.server.app.tenant.services
 
-import io.ktor.server.application.*
+import io.ktor.server.application.ApplicationCall
 import kotlinx.serialization.Serializable
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.CallResult
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.TenantData

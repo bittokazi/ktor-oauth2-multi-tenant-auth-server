@@ -1,12 +1,15 @@
 package ktor.oauth2.multi.tenant.auth.server.security.controllers
 
 import com.bittokazi.ktor.auth.utils.getBaseUrl
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.plugins.di.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.Application
+import io.ktor.server.plugins.di.dependencies
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+import io.ktor.server.response.respondRedirect
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
 import ktor.oauth2.multi.tenant.auth.server.config.RouteConfig.LOGIN_API
 import ktor.oauth2.multi.tenant.auth.server.config.RouteConfig.OAUTH_CALLBACK_API
 import ktor.oauth2.multi.tenant.auth.server.config.RouteConfig.REFRESH_TOKEN_API
@@ -40,7 +43,8 @@ fun Application.configureIdpLoginRoutes() {
                     call.respondRedirect(
                         "/oauth/authorize?client_id=${client.clientId}&response_type=code" +
                             "&scope=${client.scopes.joinToString("+")}" +
-                            "&redirect_uri=${call.getBaseUrl()}/api/v1/oauth/callback&code_challenge_method=S256&code_challenge=$codeChallenge",
+                            "&redirect_uri=${call.getBaseUrl()}/api/v1/oauth/callback" +
+                            "&code_challenge_method=S256&code_challenge=$codeChallenge",
                     )
                 }
             }

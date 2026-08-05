@@ -1,7 +1,7 @@
 package ktor.oauth2.multi.tenant.auth.server.app.tenant.services
 
-import io.ktor.server.application.*
-import io.ktor.util.*
+import io.ktor.server.application.ApplicationCall
+import io.ktor.util.AttributeKey
 import ktor.oauth2.multi.tenant.auth.server.config.AppConfig
 import ktor.oauth2.multi.tenant.auth.server.database.config.MultiTenantDatabaseConfiguration
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.CallResult

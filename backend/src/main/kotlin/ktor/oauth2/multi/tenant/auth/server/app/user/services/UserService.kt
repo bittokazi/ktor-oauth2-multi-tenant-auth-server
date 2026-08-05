@@ -1,9 +1,9 @@
 package ktor.oauth2.multi.tenant.auth.server.app.user.services
 
 import at.favre.lib.crypto.bcrypt.BCrypt
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.server.auth.principal
 import io.ktor.util.AttributeKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

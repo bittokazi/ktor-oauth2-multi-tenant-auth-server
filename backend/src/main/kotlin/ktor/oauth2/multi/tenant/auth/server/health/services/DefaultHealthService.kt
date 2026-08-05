@@ -1,6 +1,6 @@
 package ktor.oauth2.multi.tenant.auth.server.health.services
 
-import io.ktor.server.application.*
+import io.ktor.server.application.ApplicationCall
 import ktor.oauth2.multi.tenant.auth.server.database.config.DatabaseConfigurationHolder
 import ktor.oauth2.multi.tenant.auth.server.database.config.MultiTenantDatabaseConfiguration
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.CallResult

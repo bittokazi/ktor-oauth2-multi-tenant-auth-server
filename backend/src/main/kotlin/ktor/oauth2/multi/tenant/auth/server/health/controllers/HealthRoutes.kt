@@ -1,13 +1,14 @@
 package ktor.oauth2.multi.tenant.auth.server.health.controllers
 
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.plugins.di.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.Application
+import io.ktor.server.plugins.di.dependencies
+import io.ktor.server.response.respond
+import io.ktor.server.routing.RoutingContext
+import io.ktor.server.routing.get
+import io.ktor.server.routing.routing
 import ktor.oauth2.multi.tenant.auth.server.health.services.HealthService
 import ktor.oauth2.multi.tenant.auth.server.health.services.HealthServiceErrorCode
-import ktor.oauth2.multi.tenant.auth.server.health.services.HealthServiceErrorCode.*
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.CallResult
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -38,13 +39,13 @@ fun Application.healthRoutes() {
 
 private suspend fun RoutingContext.handleHealthErrorResponse(callResult: CallResult.Failure<*, HealthServiceErrorCode>) {
     when (callResult.errorCode) {
-        DATABASE_UNAVAILABLE ->
+        HealthServiceErrorCode.DATABASE_UNAVAILABLE ->
             call.respond(
                 status = HttpStatusCode.ServiceUnavailable,
                 message = callResult,
             )
 
-        HEALTH_CHECK_FAILED ->
+        HealthServiceErrorCode.HEALTH_CHECK_FAILED ->
             call.respond(
                 status = HttpStatusCode.ServiceUnavailable,
                 message = callResult,
