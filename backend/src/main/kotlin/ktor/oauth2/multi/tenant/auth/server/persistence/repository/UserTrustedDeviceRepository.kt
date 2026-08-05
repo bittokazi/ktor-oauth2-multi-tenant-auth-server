@@ -2,7 +2,10 @@ package ktor.oauth2.multi.tenant.auth.server.persistence.repository
 
 import io.ktor.server.application.ApplicationCall
 import ktor.oauth2.multi.tenant.auth.server.database.config.MultiTenantDatabaseConfiguration
-import ktor.oauth2.multi.tenant.auth.server.persistence.entity.*
+import ktor.oauth2.multi.tenant.auth.server.persistence.entity.User
+import ktor.oauth2.multi.tenant.auth.server.persistence.entity.UserTrustedDevice
+import ktor.oauth2.multi.tenant.auth.server.persistence.entity.UserTrustedDeviceData
+import ktor.oauth2.multi.tenant.auth.server.persistence.entity.UserTrustedDevices
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.deleteWhere

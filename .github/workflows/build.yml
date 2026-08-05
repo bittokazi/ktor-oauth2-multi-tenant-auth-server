@@ -36,7 +36,7 @@ jobs:
         run: cp -r frontend/build/dist/js/productionExecutable/app-static backend/src/main/resources/static/cpanel
 
       - name: Build Backend
-        run: cd backend && gradle buildFatJar --no-daemon && cd ../
+        run: cd backend && gradle check buildFatJar --no-daemon && cd ../
 
       - name: Build Gateway
         run: cd gateway && gradle buildFatJar --no-daemon && cd ../

@@ -3,6 +3,7 @@ package ktor.oauth2.multi.tenant.auth.server.utils
 import io.ktor.server.application.ApplicationCall
 import io.ktor.util.AttributeKey
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import java.io.File
 import java.math.BigInteger
@@ -10,7 +11,8 @@ import java.security.KeyFactory
 import java.security.MessageDigest
 import java.security.interfaces.RSAPrivateKey
 import java.security.spec.PKCS8EncodedKeySpec
-import java.util.*
+import java.util.Base64
+import java.util.Random
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.ExperimentalTime
@@ -24,12 +26,12 @@ object Utils {
 
     @JvmStatic
     fun randomNumberGenerator(length: Int): String {
-        val SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz"
+        val saltChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz"
         val salt = StringBuilder()
         val rnd = Random()
         while (salt.length < length) {
-            val index = (rnd.nextFloat() * SALTCHARS.length).toInt()
-            salt.append(SALTCHARS[index])
+            val index = (rnd.nextFloat() * saltChar.length).toInt()
+            salt.append(saltChar[index])
         }
         val saltStr = salt.toString()
         return saltStr
@@ -37,24 +39,24 @@ object Utils {
 
     @JvmStatic
     fun referenceGenerator(length: Int): String {
-        val SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        val saltChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
         val salt = StringBuilder()
         val rnd = Random()
         while (salt.length < length) {
-            val index = (rnd.nextFloat() * SALTCHARS.length).toInt()
-            salt.append(SALTCHARS[index])
+            val index = (rnd.nextFloat() * saltChar.length).toInt()
+            salt.append(saltChar[index])
         }
         val saltStr = salt.toString()
         return saltStr
     }
 
     fun numberGenerator(length: Int): String {
-        val SALTCHARS = "1234567890"
+        val saltChar = "1234567890"
         val salt = StringBuilder()
         val rnd = Random()
         while (salt.length < length) {
-            val index = (rnd.nextFloat() * SALTCHARS.length).toInt()
-            salt.append(SALTCHARS[index])
+            val index = (rnd.nextFloat() * saltChar.length).toInt()
+            salt.append(saltChar[index])
         }
         val saltStr = salt.toString()
         return saltStr
@@ -89,7 +91,7 @@ object Utils {
 
         val year = localDateTime.year // 2026
         val month = localDateTime.month // MAY
-        val monthNumber = localDateTime.monthNumber // 5
+        val monthNumber = localDateTime.month.number // 5
         return "$year-$monthNumber"
     }
 

@@ -5,6 +5,7 @@ import org.flywaydb.core.api.migration.BaseJavaMigration
 import org.flywaydb.core.api.migration.Context
 import java.util.UUID
 
+@Suppress("ClassName")
 class V4__seed_role_user : BaseJavaMigration() {
     override fun migrate(context: Context?) {
         if (context == null) throw RuntimeException()

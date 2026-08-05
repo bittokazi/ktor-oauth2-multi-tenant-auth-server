@@ -4,7 +4,7 @@ import com.bittokazi.ktor.auth.services.TemplateCustomizer
 import com.bittokazi.ktor.auth.services.TemplateCustomizerFactory
 import com.github.mustachejava.DefaultMustacheFactory
 import com.github.mustachejava.MustacheFactory
-import io.ktor.server.application.*
+import io.ktor.server.application.ApplicationCall
 import io.ktor.util.AttributeKey
 import ktor.oauth2.multi.tenant.auth.server.config.AppConfig
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.TenantData

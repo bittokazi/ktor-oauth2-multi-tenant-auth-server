@@ -1,6 +1,6 @@
 package ktor.oauth2.multi.tenant.auth.server.persistence.repository
 
-import io.ktor.server.application.*
+import io.ktor.server.application.ApplicationCall
 import ktor.oauth2.multi.tenant.auth.server.database.config.MultiTenantDatabaseConfiguration
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.User
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.UserTwoFaSecret

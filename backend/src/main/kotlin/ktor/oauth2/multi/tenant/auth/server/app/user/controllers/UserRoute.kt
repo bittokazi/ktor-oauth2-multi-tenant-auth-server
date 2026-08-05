@@ -1,19 +1,21 @@
 package ktor.oauth2.multi.tenant.auth.server.app.user.controllers
 
-import io.ktor.client.request.request
-import io.ktor.http.*
+import io.ktor.http.HttpStatusCode
 import io.ktor.openapi.jsonSchema
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.plugins.di.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.server.application.Application
+import io.ktor.server.auth.authenticate
+import io.ktor.server.plugins.di.dependencies
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+import io.ktor.server.routing.RoutingContext
+import io.ktor.server.routing.get
 import io.ktor.server.routing.openapi.describe
+import io.ktor.server.routing.post
+import io.ktor.server.routing.put
+import io.ktor.server.routing.routing
 import io.ktor.utils.io.ExperimentalKtorApi
 import ktor.oauth2.multi.tenant.auth.server.app.user.services.UserService
 import ktor.oauth2.multi.tenant.auth.server.app.user.services.UserServiceError
-import ktor.oauth2.multi.tenant.auth.server.app.user.services.UserServiceError.*
 import ktor.oauth2.multi.tenant.auth.server.config.RouteConfig.API_USER
 import ktor.oauth2.multi.tenant.auth.server.config.RouteConfig.API_USER_BY_ID
 import ktor.oauth2.multi.tenant.auth.server.config.RouteConfig.API_USER_SEARCH
@@ -43,15 +45,15 @@ fun Application.userRoute() {
                     ),
                     call,
                 ) {
-                    when (val CallResult = userService.whoAmI(call)) {
+                    when (val callResult = userService.whoAmI(call)) {
                         is CallResult.Success ->
                             call.respond(
                                 status = HttpStatusCode.OK,
-                                message = CallResult.outcome,
+                                message = callResult.outcome,
                             )
 
                         is CallResult.Failure -> {
-                            handleErrorResponse(CallResult)
+                            handleErrorResponse(callResult)
                         }
                     }
                 }
@@ -136,15 +138,15 @@ fun Application.userRoute() {
                     ),
                     call,
                 ) {
-                    when (val CallResult = userService.get(call)) {
+                    when (val callResult = userService.get(call)) {
                         is CallResult.Success ->
                             call.respond(
                                 status = HttpStatusCode.OK,
-                                message = CallResult.outcome,
+                                message = callResult.outcome,
                             )
 
                         is CallResult.Failure -> {
-                            handleErrorResponse(CallResult)
+                            handleErrorResponse(callResult)
                         }
                     }
                 }
@@ -176,15 +178,15 @@ fun Application.userRoute() {
                     ),
                     call,
                 ) {
-                    when (val CallResult = userService.findByProperty(call)) {
+                    when (val callResult = userService.findByProperty(call)) {
                         is CallResult.Success ->
                             call.respond(
                                 status = HttpStatusCode.OK,
-                                message = CallResult.outcome,
+                                message = callResult.outcome,
                             )
 
                         is CallResult.Failure -> {
-                            handleErrorResponse(CallResult)
+                            handleErrorResponse(callResult)
                         }
                     }
                 }
@@ -221,14 +223,14 @@ fun Application.userRoute() {
                 ) {
                     val payload = call.receive<UserData>()
 
-                    when (val CallResult = userService.register(call, payload, false)) {
+                    when (val callResult = userService.register(call, payload, false)) {
                         is CallResult.Success ->
                             call.respond(
                                 status = HttpStatusCode.OK,
-                                message = CallResult.outcome,
+                                message = callResult.outcome,
                             )
 
-                        is CallResult.Failure -> handleErrorResponse(CallResult)
+                        is CallResult.Failure -> handleErrorResponse(callResult)
                     }
                 }
             }.describe {
@@ -261,15 +263,15 @@ fun Application.userRoute() {
                 ) {
                     val payload = call.receive<UserData>()
 
-                    when (val CallResult = userService.update(call, payload, false)) {
+                    when (val callResult = userService.update(call, payload, false)) {
                         is CallResult.Success ->
                             call.respond(
                                 status = HttpStatusCode.OK,
-                                message = CallResult.outcome,
+                                message = callResult.outcome,
                             )
 
                         is CallResult.Failure -> {
-                            handleErrorResponse(CallResult)
+                            handleErrorResponse(callResult)
                         }
                     }
                 }
@@ -303,15 +305,15 @@ fun Application.userRoute() {
                 ) {
                     val payload = call.receive<UserData>()
 
-                    when (val CallResult = userService.updatePassword(call, payload, false)) {
+                    when (val callResult = userService.updatePassword(call, payload, false)) {
                         is CallResult.Success ->
                             call.respond(
                                 status = HttpStatusCode.OK,
-                                message = CallResult.outcome,
+                                message = callResult.outcome,
                             )
 
                         is CallResult.Failure -> {
-                            handleErrorResponse(CallResult)
+                            handleErrorResponse(callResult)
                         }
                     }
                 }
@@ -345,15 +347,15 @@ fun Application.userRoute() {
                 ) {
                     val payload = call.receive<UserData>()
 
-                    when (val CallResult = userService.update(call, payload, true)) {
+                    when (val callResult = userService.update(call, payload, true)) {
                         is CallResult.Success ->
                             call.respond(
                                 status = HttpStatusCode.OK,
-                                message = CallResult.outcome,
+                                message = callResult.outcome,
                             )
 
                         is CallResult.Failure -> {
-                            handleErrorResponse(CallResult)
+                            handleErrorResponse(callResult)
                         }
                     }
                 }
@@ -387,15 +389,15 @@ fun Application.userRoute() {
                 ) {
                     val payload = call.receive<UserData>()
 
-                    when (val CallResult = userService.updatePassword(call, payload, true)) {
+                    when (val callResult = userService.updatePassword(call, payload, true)) {
                         is CallResult.Success ->
                             call.respond(
                                 status = HttpStatusCode.OK,
-                                message = CallResult.outcome,
+                                message = callResult.outcome,
                             )
 
                         is CallResult.Failure -> {
-                            handleErrorResponse(CallResult)
+                            handleErrorResponse(callResult)
                         }
                     }
                 }
@@ -427,19 +429,19 @@ fun Application.userRoute() {
 
 private suspend fun RoutingContext.handleErrorResponse(callResult: CallResult.Failure<UserData, UserServiceError>) {
     when (callResult.errorCode) {
-        NOT_FOUND ->
+        UserServiceError.NOT_FOUND ->
             call.respond(
                 status = HttpStatusCode.NotFound,
                 message = callResult,
             )
 
-        UNPROCESSABLE_ENTITY ->
+        UserServiceError.UNPROCESSABLE_ENTITY ->
             call.respond(
                 status = HttpStatusCode.UnprocessableEntity,
                 message = callResult,
             )
 
-        EMAIL_EXIST ->
+        UserServiceError.EMAIL_EXIST ->
             call.respond(
                 status = HttpStatusCode.BadRequest,
                 message =
@@ -448,7 +450,7 @@ private suspend fun RoutingContext.handleErrorResponse(callResult: CallResult.Fa
                     ),
             )
 
-        PASSWORD_DOES_NOT_MATCH ->
+        UserServiceError.PASSWORD_DOES_NOT_MATCH ->
             call.respond(
                 status = HttpStatusCode.BadRequest,
                 message =

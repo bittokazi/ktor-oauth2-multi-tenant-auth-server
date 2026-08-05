@@ -1,10 +1,10 @@
 package ktor.oauth2.multi.tenant.auth.server.security.services
 
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
-import io.ktor.server.response.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.server.auth.principal
+import io.ktor.server.response.respond
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.ScopeEnum
 
 suspend fun scopeCheck(

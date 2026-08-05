@@ -65,7 +65,7 @@ class DefaultPasswordResetService(
         return when (val userData = userRepository.findOneByEmail(passwordResetTokenRequest.email, call = call)) {
             is UserData ->
                 when (userData.id) {
-                    is Long -> {
+                    is String -> {
                         val result = passwordResetTokenRepository.create(userData.id, call = call)
 
                         CoroutineScope(Dispatchers.Default).launch {
@@ -75,8 +75,10 @@ class DefaultPasswordResetService(
                                 "${appModuleConfiguration.appName} - Password Reset Request",
                                 mailGeneratorService.generateResetPasswordMail(
                                     mapOf(
-                                        ResetPasswordMailLabel.USERNAME to "${result.user.firstName} ${result.user.lastName}",
-                                        ResetPasswordMailLabel.RESET_LINK to "${appModuleConfiguration.domain}/app/reset-password/${result.token}",
+                                        ResetPasswordMailLabel.USERNAME to
+                                            "${result.user.firstName} ${result.user.lastName}",
+                                        ResetPasswordMailLabel.RESET_LINK to
+                                            "${appModuleConfiguration.domain}/app/reset-password/${result.token}",
                                     ),
                                 ),
                             )
