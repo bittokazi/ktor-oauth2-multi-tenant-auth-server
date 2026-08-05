@@ -1,0 +1,124 @@
+name: "Release: Docker Image Publish"
+run-name: Release ${{ github.event.release.tag_name }}
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Build Image ${{ github.event.release.tag_name }}
+    runs-on: ubuntu-24.04
+    environment: "docker-hub"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+      - name: Change wrapper permissions
+        run: chmod +x ./transport-timetable-backend/gradlew
+
+      - name: Build Frontend
+        run: cd frontend && gradle buildFrontend --no-daemon && cd ../
+
+      - name: Move cpanel.hbs into Backend
+        run: mv frontend/build/dist/js/productionExecutable/index.html backend/src/main/resources/templates/cpanel.hbs
+
+      - name: Move cpanel build into Backend
+        run: cp -r frontend/build/dist/js/productionExecutable/app-static backend/src/main/resources/static/cpanel
+
+      - name: Build Backend
+        run: cd backend && gradle buildFatJar --no-daemon && cd ../
+
+      - name: Build Gateway
+        run: cd gateway && gradle buildFatJar --no-daemon && cd ../
+
+      - name: Upload Backend Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-build
+          path: |
+            backend/build/libs/backend-all.jar
+          retention-days: 1
+
+      - name: Upload Gateway Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: gateway-build
+          path: |
+            gateway/build/libs/gateway-all.jar
+          retention-days: 1
+
+  deploy-image:
+    name: Deploy Image [${{ matrix.arch }}] [docker-hub]
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: arm64
+            platform: linux/arm64
+            dockerfile: ./Dockerfile
+            image_tag: arm64-latest
+
+          - arch: amd64
+            platform: linux/amd64
+            dockerfile: ./Dockerfile
+            image_tag: latest
+    environment: "docker-hub"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Set up QEMU
+        if: matrix.arch == 'arm64'
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Download Backend Build
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-build
+          path: .
+
+      - name: Download Gateway Build
+        uses: actions/download-artifact@v4
+        with:
+          name: gateway-build
+          path: .
+
+      - name: Log into Docker Registry
+        uses: docker/login-action@v2
+        with:
+          registry: docker.io
+          username: bittokazi
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+
+      - name: Build and Push Backend Service Image
+        uses: docker/build-push-action@v4
+        with:
+          context: backend
+          file: ${{ matrix.dockerfile }}
+          build-args: |
+            CONFIG_ENV=docker-hub
+          push: true
+          tags: |
+            docker.io/bittokazi/ktor-oauth2-multi-tenant-auth-server:${{ matrix.image_tag }}
+            docker.io/bittokazi/ktor-oauth2-multi-tenant-auth-server:${{ matrix.arch }}-${{ github.event.release.tag_name }}
+          platforms: ${{ matrix.platform }}
+          cache-from: type=registry,ref=docker.io/bittokazi/ktor-oauth2-multi-tenant-auth-server:${{ matrix.arch }}-latest-cache
+          cache-to: type=registry,ref=docker.io/bittokazi/ktor-oauth2-multi-tenant-auth-server:${{ matrix.arch }}-latest-cache,mode=max

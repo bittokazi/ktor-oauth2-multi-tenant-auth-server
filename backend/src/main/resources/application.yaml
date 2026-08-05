@@ -1,0 +1,63 @@
+ktor:
+  application:
+    modules:
+      - ktor.oauth2.multi.tenant.auth.server.ApplicationKt.module
+  deployment:
+    port: 8081
+
+databases:
+  default:
+    url: jdbc:postgresql://172.17.0.1:5432/ktor_auth_db
+    driver: "org.postgresql.Driver"
+    schema: "public"
+    username: postgres
+    password: password
+
+jwk:
+  key-id: "my-key-id"
+  private-key-path: certificates/default_private_key_pkcs8.pem
+  public-key-path: certificates/default_public_key.pem
+
+idp-client-config:
+  enabled: true
+
+oauth:
+  enabled: true
+  issuer: "http://0.0.0.0:5035"
+  no-redirect-clients: []
+  session:
+    timeout: 3600 # session timeout in seconds
+    encryption-key: 3204f2660eb548889f90d4ad996d5396 # has to be 32 character. set your own
+    signing-key: 903312418bc44edf8aa32642ee6380ee # has to be 32 character. set your own
+
+app:
+  name: "AuthKit"
+  domain: http://0.0.0.0:5035
+  template-folder: /home/bitto/Documents/kotlin/templates/data
+  documentation:
+    enabled: true
+  health-endpoint:
+    enabled: true
+  modules:
+    USER:
+      enabled: true
+    CLIENT:
+      enabled: true
+    CPANEL:
+      enabled: true
+    PASSWORD_RESET:
+      enabled: true
+    ROLE:
+      enabled: true
+    TENANT:
+      enabled: true
+
+mail-config:
+  enabled: true
+  host: smtp-relay.example.mail.server.com
+  port: 587
+  auth: true
+  starttls: true
+  from: "no-reply@example.com"
+  username: no-reply@example.com
+  password: password
