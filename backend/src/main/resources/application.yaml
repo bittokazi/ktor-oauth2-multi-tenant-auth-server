@@ -33,7 +33,7 @@ oauth:
 app:
   name: "AuthKit"
   domain: http://0.0.0.0:5035
-  template-folder: /home/bitto/Documents/kotlin/templates/data
+  template-folder: /path/to/templates/folder
   documentation:
     enabled: true
   health-endpoint:
