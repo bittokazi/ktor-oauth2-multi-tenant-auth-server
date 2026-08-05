@@ -26,7 +26,7 @@ jobs:
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
       - name: Change wrapper permissions
-        run: chmod +x ./transport-timetable-backend/gradlew
+        run: chmod +x ./backend/gradlew
 
       - name: Build Frontend
         run: cd frontend && gradle buildFrontend --no-daemon && cd ../
@@ -42,6 +42,15 @@ jobs:
 
       - name: Build Gateway
         run: cd gateway && gradle buildFatJar --no-daemon && cd ../
+
+      - name: Remove Previous Build Artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ARTIFACTS=$(gh api repos/${{ github.repository }}/actions/artifacts --jq '.artifacts[].id')
+          for ARTIFACT_ID in $ARTIFACTS; do
+            gh api -X DELETE repos/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID
+          done
 
       - name: Upload Backend Build
         uses: actions/upload-artifact@v4
@@ -62,6 +71,8 @@ jobs:
   deploy-image:
     name: Deploy Image [${{ matrix.arch }}] [docker-hub]
     runs-on: ubuntu-24.04
+    needs:
+      - build
     strategy:
       fail-fast: false
       matrix:
