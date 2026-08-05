@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build Image ${{ github.event.release.tag_name }}
+    name: Build Services ${{ github.event.release.tag_name }}
     runs-on: ubuntu-24.04
     environment: "docker-hub"
     steps:
@@ -55,7 +55,7 @@ jobs:
       - name: Upload Backend Build
         uses: actions/upload-artifact@v4
         with:
-          name: backend-build
+          name: backend-${{ github.event.release.tag_name }}.jar
           path: |
             backend/build/libs/backend-all.jar
           retention-days: 1
@@ -63,13 +63,13 @@ jobs:
       - name: Upload Gateway Build
         uses: actions/upload-artifact@v4
         with:
-          name: gateway-build
+          name: gateway-${{ github.event.release.tag_name }}.jar
           path: |
             gateway/build/libs/gateway-all.jar
           retention-days: 1
 
   deploy-image:
-    name: Deploy Image [${{ matrix.arch }}] [docker-hub]
+    name: Deploy Image [${{ matrix.arch }}]
     runs-on: ubuntu-24.04
     needs:
       - build
@@ -103,13 +103,13 @@ jobs:
       - name: Download Backend Build
         uses: actions/download-artifact@v4
         with:
-          name: backend-build
+          name: backend-${{ github.event.release.tag_name }}.jar
           path: .
 
       - name: Download Gateway Build
         uses: actions/download-artifact@v4
         with:
-          name: gateway-build
+          name: gateway-${{ github.event.release.tag_name }}.jar
           path: .
 
       - name: Log into Docker Registry
@@ -122,10 +122,10 @@ jobs:
       - name: Build and Push Backend Service Image
         uses: docker/build-push-action@v4
         with:
-          context: backend
+          context: .
           file: ${{ matrix.dockerfile }}
           build-args: |
-            CONFIG_ENV=docker-hub
+            RELEASE_TAG=${{ github.event.release.tag_name }}
           push: true
           tags: |
             docker.io/bittokazi/ktor-oauth2-multi-tenant-auth-server:${{ matrix.image_tag }}
