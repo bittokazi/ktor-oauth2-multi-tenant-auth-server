@@ -29,4 +29,4 @@ jobs:
 
       - name: Run ktlint
         id: ktlint
-        run: ./cd backend && ./gradlew ktlintCheck
+        run: cd backend && ./gradlew ktlintCheck
