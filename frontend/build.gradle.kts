@@ -69,7 +69,7 @@ kotlin {
 tasks.register<Copy>("copy") {
     dependsOn("clean", "zip")
     from("build/dist/libs")
-    into("build/dist/js/productionExecutable/static")
+    into("build/dist/js/productionExecutable/app-static")
 }
 
 tasks.register("buildFrontend") {
