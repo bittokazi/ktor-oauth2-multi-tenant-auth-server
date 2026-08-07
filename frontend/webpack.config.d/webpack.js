@@ -21,7 +21,7 @@ config.output = {
             ? "main.bundle.js"
             : "main.bundle-[name].js";
     },
-    publicPath: "/static",
+    publicPath: "/app-static",
     library: "project",
     libraryTarget: "umd",
     globalObject: "this"
