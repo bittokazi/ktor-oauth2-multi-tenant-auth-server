@@ -1,11 +1,11 @@
 package ktor.oauth2.multi.tenant.auth.server.app.cpanel.controllers
 
+import com.bittokazi.ktor.auth.services.TemplateCustomizerFactory
+import com.bittokazi.ktor.auth.utils.respondMustache
 import io.ktor.server.application.Application
 import io.ktor.server.http.content.staticFiles
 import io.ktor.server.http.content.staticResources
-import io.ktor.server.mustache.MustacheContent
 import io.ktor.server.plugins.di.dependencies
-import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import ktor.oauth2.multi.tenant.auth.server.app.config.AppModuleConfiguration
@@ -17,6 +17,7 @@ fun Application.cpanelRoutes() {
     val log: Logger = LoggerFactory.getLogger(javaClass)
 
     val appModuleConfiguration: AppModuleConfiguration by dependencies
+    val templateCustomizerFactory: TemplateCustomizerFactory by dependencies
 
     routing {
         staticResources("/app-static", "static/cpanel")
@@ -24,19 +25,28 @@ fun Application.cpanelRoutes() {
     }
 
     routing {
-        // ignore!
         get("/app") {
-            call.respond(MustacheContent("cpanel.hbs", mapOf<String, String>()))
+            call.respondMustache(
+                templateCustomizerFactory,
+                "cpanel.hbs",
+                mapOf<String, Any>(),
+            )
         }
 
-        // ignore!
         get("/app/") {
-            call.respond(MustacheContent("cpanel.hbs", mapOf<String, String>()))
+            call.respondMustache(
+                templateCustomizerFactory,
+                "cpanel.hbs",
+                mapOf<String, Any>(),
+            )
         }
 
-        // ignore!
         get("/app/{...}") {
-            call.respond(MustacheContent("cpanel.hbs", mapOf<String, String>()))
+            call.respondMustache(
+                templateCustomizerFactory,
+                "cpanel.hbs",
+                mapOf<String, Any>(),
+            )
         }
     }
 

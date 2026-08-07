@@ -85,11 +85,13 @@ jobs:
             platform: linux/arm64
             dockerfile: ./Dockerfile
             image_tag: arm64-latest
+            version_tag: arm64-${{ github.event.release.tag_name }}
 
           - arch: amd64
             platform: linux/amd64
             dockerfile: ./Dockerfile
             image_tag: latest
+            version_tag: ${{ github.event.release.tag_name }}
     environment: "docker-hub"
     steps:
       - name: Checkout Repository
@@ -138,7 +140,7 @@ jobs:
           push: true
           tags: |
             docker.io/bittokazi/ktor-oauth2-multi-tenant-auth-server:${{ matrix.image_tag }}
-            docker.io/bittokazi/ktor-oauth2-multi-tenant-auth-server:${{ matrix.arch }}-${{ github.event.release.tag_name }}
+            docker.io/bittokazi/ktor-oauth2-multi-tenant-auth-server:${{ matrix.version_tag }}
           platforms: ${{ matrix.platform }}
           cache-from: type=registry,ref=docker.io/bittokazi/ktor-oauth2-multi-tenant-auth-server:${{ matrix.arch }}-latest-cache
           cache-to: type=registry,ref=docker.io/bittokazi/ktor-oauth2-multi-tenant-auth-server:${{ matrix.arch }}-latest-cache,mode=max
