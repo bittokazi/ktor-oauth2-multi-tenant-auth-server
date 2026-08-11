@@ -10,6 +10,7 @@ import com.bittokazi.ktor.auth.services.SessionCustomizer
 import com.bittokazi.ktor.auth.services.SessionExtender
 import com.bittokazi.ktor.auth.services.TemplateCustomizer
 import com.bittokazi.ktor.auth.services.TemplateCustomizerFactory
+import com.bittokazi.ktor.auth.services.issuer.IssuerProvider
 import com.bittokazi.ktor.auth.services.providers.OauthAuthorizationCodeService
 import com.bittokazi.ktor.auth.services.providers.OauthClientService
 import com.bittokazi.ktor.auth.services.providers.OauthConsentService
@@ -30,6 +31,7 @@ import io.ktor.server.plugins.di.dependencies
 import io.ktor.server.plugins.requestvalidation.RequestValidation
 import ktor.oauth2.multi.tenant.auth.server.persistence.repository.TenantRepository
 import ktor.oauth2.multi.tenant.auth.server.security.config.ExtraTokenClaimConfig
+import ktor.oauth2.multi.tenant.auth.server.security.config.IssuerProviderImpl
 import ktor.oauth2.multi.tenant.auth.server.security.config.JwtCustomizerImpl
 import ktor.oauth2.multi.tenant.auth.server.security.config.LoginOptionServiceImpl
 import ktor.oauth2.multi.tenant.auth.server.security.config.LogoutActionCustomizerImpl
@@ -82,6 +84,10 @@ fun Application.configureSecurityModule() {
             provide(LoginService::class)
             provide<TwoFaService>(DefaultTwoFaService::class)
             provide<TemplateCustomizerFactory>(OauthTemplateCustomizerImpl::class)
+
+            if (oauthConfig.enableIssuerProvider) {
+                provide<IssuerProvider>(IssuerProviderImpl::class)
+            }
         }
 
         configureOauth2AuthorizationServer(
