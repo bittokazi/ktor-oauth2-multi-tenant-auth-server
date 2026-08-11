@@ -13,5 +13,5 @@ proxy:
         target: http://127.0.0.1:8081
       - prefix: /app
         target: http://127.0.0.1:3039
-      - prefix: /static
+      - prefix: /app-static
         target: http://127.0.0.1:3039
