@@ -8,5 +8,5 @@ data class OauthConfig(
     @Property("oauth.no-redirect-clients") val noRedirectClients: List<String> = listOf(),
     @Property("app.name") val appName: String,
     @Property("app.template-folder") val templateFolder: String,
-    @Property("app.enable-issuer-provider") val enableIssuerProvider: Boolean = false,
+    @Property("oauth.enable-issuer-provider") val enableIssuerProvider: Boolean = false,
 )
