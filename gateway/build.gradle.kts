@@ -46,7 +46,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.5.13")
 
     implementation("com.bittokazi.sonartype:ktor-oauth-authorization-server:1.3.1")
-    implementation("com.bittokazi.sonartype:ktor-gateway:1.0.2")
+    implementation("com.bittokazi.sonartype:ktor-gateway:1.0.3")
 
     testImplementation("io.ktor:ktor-server-test-host")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
