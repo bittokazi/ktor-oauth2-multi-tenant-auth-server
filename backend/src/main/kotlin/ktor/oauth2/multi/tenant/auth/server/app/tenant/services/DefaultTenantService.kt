@@ -35,7 +35,7 @@ class DefaultTenantService(
                             true,
                             enabledConfigPanel = true,
                             name = appModuleConfiguration.appName,
-                            systemVersion = appInfo.version
+                            systemVersion = appInfo.version,
                         ),
                     )
                 else ->
