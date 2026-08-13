@@ -2,6 +2,8 @@ package ktor.oauth2.multi.tenant.auth.server.app.tenant.services
 
 import io.ktor.server.application.ApplicationCall
 import io.ktor.util.AttributeKey
+import ktor.oauth2.multi.tenant.auth.server.app.config.AppInfo
+import ktor.oauth2.multi.tenant.auth.server.app.config.AppModuleConfiguration
 import ktor.oauth2.multi.tenant.auth.server.config.AppConfig
 import ktor.oauth2.multi.tenant.auth.server.database.config.MultiTenantDatabaseConfiguration
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.CallResult
@@ -15,6 +17,8 @@ class DefaultTenantService(
     private val tenantRepository: TenantRepository,
     private val multiTenantDatabaseConfiguration: MultiTenantDatabaseConfiguration,
     private val fileService: FileService,
+    private val appModuleConfiguration: AppModuleConfiguration,
+    private val appInfo: AppInfo,
 ) : TenantService {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -30,7 +34,8 @@ class DefaultTenantService(
                         TenantInfo(
                             true,
                             enabledConfigPanel = true,
-                            name = "Auth Kit",
+                            name = appModuleConfiguration.appName,
+                            systemVersion = appInfo.version,
                         ),
                     )
                 else ->
@@ -40,6 +45,7 @@ class DefaultTenantService(
                                 false,
                                 enabledConfigPanel = tenant.enableConfigPanel,
                                 name = tenant.name,
+                                systemVersion = appInfo.version,
                             ),
                         )
                     } ?: run {

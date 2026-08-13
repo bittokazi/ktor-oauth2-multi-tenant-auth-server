@@ -3,7 +3,6 @@ package ktor.oauth2.multi.tenant.auth.server.app.tenant.controllers
 import io.ktor.http.HttpStatusCode
 import io.ktor.openapi.jsonSchema
 import io.ktor.server.application.Application
-import io.ktor.server.application.log
 import io.ktor.server.auth.authenticate
 import io.ktor.server.plugins.di.dependencies
 import io.ktor.server.request.receive
@@ -15,6 +14,7 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
 import io.ktor.utils.io.ExperimentalKtorApi
+import ktor.oauth2.multi.tenant.auth.server.app.tenant.services.TenantInfo
 import ktor.oauth2.multi.tenant.auth.server.app.tenant.services.TenantService
 import ktor.oauth2.multi.tenant.auth.server.app.tenant.services.TenantServiceError
 import ktor.oauth2.multi.tenant.auth.server.config.RouteConfig.API_TENANT
@@ -25,9 +25,12 @@ import ktor.oauth2.multi.tenant.auth.server.persistence.entity.CallResult
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.ScopeEnum
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.TenantData
 import ktor.oauth2.multi.tenant.auth.server.security.services.scopeCheck
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @OptIn(ExperimentalKtorApi::class)
 fun Application.tenantRoute() {
+    val log: Logger = LoggerFactory.getLogger(javaClass)
     val tenantService: TenantService by dependencies
 
     routing {
@@ -44,7 +47,7 @@ fun Application.tenantRoute() {
             responses {
                 HttpStatusCode.OK {
                     description = "Tenant information retrieved successfully"
-                    schema = jsonSchema<TenantData>()
+                    schema = jsonSchema<TenantInfo>()
                 }
                 HttpStatusCode.NotFound {
                     description = "Tenant not found"

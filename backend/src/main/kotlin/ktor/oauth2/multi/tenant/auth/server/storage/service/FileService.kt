@@ -26,6 +26,8 @@ interface FileService {
         call: ApplicationCall,
         fn: suspend (CallResult<String, FileErrorCode>) -> Unit,
     )
+
+    fun loadTextFile(path: String): String?
 }
 
 class DefaultFileService(
@@ -170,6 +172,25 @@ class DefaultFileService(
         }
 
         return destFile
+    }
+
+    override fun loadTextFile(path: String): String? {
+        val file = File(path)
+
+        // 1) Absolute or relative file on host filesystem
+        if (file.exists()) {
+            return file.readText()
+        }
+
+        // 2) Resource inside the JAR (from src/main/resources)
+        val resourceStream =
+            object {}.javaClass.classLoader.getResourceAsStream(path)
+                ?: run {
+                    log.error("Resource not found: $path")
+                    return null
+                }
+
+        return resourceStream.bufferedReader().readText()
     }
 }
 
