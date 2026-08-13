@@ -7,5 +7,6 @@ data class TenantInfo (
     val cpanel: Boolean = true,
     val enabledConfigPanel: Boolean = true,
     val name: String = "",
-    val systemVersion: String = "v0.0.0_Dev"
+    val systemVersion: String = "v0.0.0_Dev",
+    val changeLogs: List<String> = listOf()
 )

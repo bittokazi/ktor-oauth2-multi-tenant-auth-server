@@ -16,6 +16,7 @@ import kotlin.js.Promise
 class TenantService: TenantInformationProvider {
 
     val roleBaseUrl = "${restService.BASE_URL}/api/v1/tenants"
+    var changeLogs: List<String> = mutableListOf()
 
     fun getCompanyInfo(): Promise<RestResponse<TenantInfo>> {
         return restService.getPublicClient().request<TenantInfo>("${restService.BASE_URL}/api/v1/tenants/info") {
@@ -62,6 +63,7 @@ class TenantService: TenantInformationProvider {
     override fun getTenantInfoProvider(): Promise<SpaTenantInfo> {
         return Promise { resolve, reject ->
             getCompanyInfo().then {
+                changeLogs = it.data.changeLogs
                 resolve(
                     SpaTenantInfo(
                         cpanel = it.data.cpanel,
