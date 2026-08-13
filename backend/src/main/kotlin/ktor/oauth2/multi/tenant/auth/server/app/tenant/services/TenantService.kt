@@ -35,6 +35,7 @@ data class TenantInfo(
     val enabledConfigPanel: Boolean,
     val name: String,
     val systemVersion: String = "v0.0.0_Dev",
+    val changeLogs: List<String> = listOf(),
 )
 
 enum class TenantServiceError {

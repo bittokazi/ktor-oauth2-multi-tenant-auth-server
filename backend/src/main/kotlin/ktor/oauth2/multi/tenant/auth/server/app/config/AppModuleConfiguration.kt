@@ -29,4 +29,5 @@ data class AppModuleConfig(
 @Serializable
 data class AppInfo(
     val version: String,
+    var changeLogs: List<String> = mutableListOf(),
 )

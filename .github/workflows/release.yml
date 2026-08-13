@@ -11,9 +11,8 @@ permissions:
 
 jobs:
   remove-artifacts:
-    name: Build Services ${{ github.event.release.tag_name }}
+    name: Remove Previous Build Artifacts
     runs-on: ubuntu-24.04
-    environment: "docker-hub"
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -30,11 +29,10 @@ jobs:
           done
 
   build-backend:
-    name: Build Services ${{ github.event.release.tag_name }}
+    name: Build Backend ${{ github.event.release.tag_name }}
     needs:
       - remove-artifacts
     runs-on: ubuntu-24.04
-    environment: "docker-hub"
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -74,11 +72,10 @@ jobs:
           retention-days: 1
 
   build-gateway:
-    name: Build Services ${{ github.event.release.tag_name }}
+    name: Build Gateway ${{ github.event.release.tag_name }}
     needs:
       - remove-artifacts
     runs-on: ubuntu-24.04
-    environment: "docker-hub"
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

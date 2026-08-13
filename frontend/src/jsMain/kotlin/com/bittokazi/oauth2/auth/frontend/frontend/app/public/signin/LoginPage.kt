@@ -2,20 +2,27 @@ package com.bittokazi.oauth2.auth.frontend.frontend.app.public.signin
 
 import com.bittokazi.kvision.spa.framework.base.common.ObservableManager
 import com.bittokazi.kvision.spa.framework.base.services.SpaTenantService.tenantInfoObserver
+import com.bittokazi.kvision.spa.framework.base.utils.sweetAlert
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.BACKEND_OAUTH2_LOGIN_ROUTE
 import com.bittokazi.oauth2.auth.frontend.frontend.base.utils.Utils
 import io.kvision.core.getElementJQuery
+import io.kvision.core.onClick
 import io.kvision.form.form
 import io.kvision.html.*
 import io.kvision.panel.SimplePanel
 import io.kvision.state.ObservableValue
 import io.kvision.state.bind
 import kotlinx.browser.window
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToDynamic
 
 private const val COMPANY_INFO_OBSERVER_LOGIN_PAGE = "companyInfoObserverLoginPage"
 private const val COMPANY_INFO_OBSERVER_RESET_PASSWORD_LOGIN_PAGE = "companyInfoObserverResetPasswordLoginPage"
+private const val COMPANY_INFO_OBSERVER_VERSION = "companyInfoObserverVersion"
 
+@OptIn(ExperimentalSerializationApi::class)
 class LoginPage(): SimplePanel() {
 
     private val errorMessage: ObservableValue<String> = ObservableValue("")
@@ -83,6 +90,37 @@ class LoginPage(): SimplePanel() {
                                             div(className = "text-center gap-2 mb-3") {
                                                 span("Forgot your password?&nbsp;", rich = true)
                                                 link("Reset here", "/app/reset-password", dataNavigo = true).toString()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            ObservableManager.setSubscriber(COMPANY_INFO_OBSERVER_VERSION) {
+                                tenantInfoObserver.subscribe {
+                                    if (it != null) {
+                                        div(className = "text-center pb-3") {
+                                            span {
+                                                p {
+                                                    span("${it.systemVersion} | ")
+                                                    span(
+                                                        "Change Log",
+                                                        className = "cursor-pointer"
+                                                    ).onClick {
+                                                        val changeLogs = AppEngine.tenantService.changeLogs.ifEmpty { listOf("No changelog available") }
+                                                        sweetAlert.fire(
+                                                            Json.encodeToDynamic(
+                                                                mapOf(
+                                                                    "title" to "Change log",
+                                                                    "html" to Utils.formatChangeLogHtml(changeLogs),
+                                                                    "icon" to "info",
+                                                                    "confirmButtonText" to "Close",
+                                                                    "width" to "600px"
+                                                                )
+                                                            )
+                                                        )
+                                                    }
+                                                }
                                             }
                                         }
                                     }

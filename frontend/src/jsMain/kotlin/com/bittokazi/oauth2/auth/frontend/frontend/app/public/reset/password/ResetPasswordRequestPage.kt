@@ -5,8 +5,10 @@ import com.bittokazi.kvision.spa.framework.base.common.SpaAppEngine
 import com.bittokazi.kvision.spa.framework.base.services.SpaTenantService.tenantInfoObserver
 import com.bittokazi.kvision.spa.framework.base.utils.sweetAlert
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine
+import com.bittokazi.oauth2.auth.frontend.frontend.base.utils.Utils
 import io.kvision.core.UNIT
 import io.kvision.core.getElementJQuery
+import io.kvision.core.onClick
 import io.kvision.core.onEvent
 import io.kvision.form.form
 import io.kvision.form.text.TextInput
@@ -146,6 +148,37 @@ class ResetPasswordRequestPage() : SimplePanel() {
                                         div(className = "text-center mb-3") {
                                             span("Want to login to your account?&nbsp;", rich = true)
                                             link("Continue here", "/app/login", dataNavigo = true).toString()
+                                        }
+                                    }
+
+                                    ObservableManager.setSubscriber("companyInfoObserverVersion") {
+                                        tenantInfoObserver.subscribe {
+                                            if (it != null) {
+                                                div(className = "text-center pb-3") {
+                                                    span {
+                                                        p {
+                                                            span("${it.systemVersion} | ")
+                                                            span(
+                                                                "Change Log",
+                                                                className = "cursor-pointer"
+                                                            ).onClick {
+                                                                val changeLogs = AppEngine.tenantService.changeLogs.ifEmpty { listOf("No changelog available") }
+                                                                sweetAlert.fire(
+                                                                    Json.encodeToDynamic(
+                                                                        mapOf(
+                                                                            "title" to "Change log",
+                                                                            "html" to Utils.formatChangeLogHtml(changeLogs),
+                                                                            "icon" to "info",
+                                                                            "confirmButtonText" to "Close",
+                                                                            "width" to "600px"
+                                                                        )
+                                                                    )
+                                                                )
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }

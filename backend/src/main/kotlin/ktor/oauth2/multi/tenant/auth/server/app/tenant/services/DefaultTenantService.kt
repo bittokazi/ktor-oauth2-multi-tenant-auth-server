@@ -36,6 +36,7 @@ class DefaultTenantService(
                             enabledConfigPanel = true,
                             name = appModuleConfiguration.appName,
                             systemVersion = appInfo.version,
+                            changeLogs = appInfo.changeLogs,
                         ),
                     )
                 else ->
@@ -46,6 +47,7 @@ class DefaultTenantService(
                                 enabledConfigPanel = tenant.enableConfigPanel,
                                 name = tenant.name,
                                 systemVersion = appInfo.version,
+                                changeLogs = appInfo.changeLogs,
                             ),
                         )
                     } ?: run {
