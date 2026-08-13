@@ -25,3 +25,8 @@ enum class AppModule {
 data class AppModuleConfig(
     val enabled: Boolean,
 )
+
+@Serializable
+data class AppInfo(
+    val version: String,
+)
