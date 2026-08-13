@@ -10,8 +10,29 @@ permissions:
   actions: write
 
 jobs:
-  build:
+  remove-artifacts:
     name: Build Services ${{ github.event.release.tag_name }}
+    runs-on: ubuntu-24.04
+    environment: "docker-hub"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Remove Previous Build Artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ARTIFACTS=$(gh api repos/${{ github.repository }}/actions/artifacts --jq '.artifacts[].id')
+          for ARTIFACT_ID in $ARTIFACTS; do
+            gh api -X DELETE repos/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID
+          done
+
+  build-backend:
+    name: Build Services ${{ github.event.release.tag_name }}
+    needs:
+      - remove-artifacts
     runs-on: ubuntu-24.04
     environment: "docker-hub"
     steps:
@@ -44,18 +65,6 @@ jobs:
       - name: Build Backend
         run: cd backend && gradle check buildFatJar --no-daemon && cd ../
 
-      - name: Build Gateway
-        run: cd gateway && gradle buildFatJar --no-daemon && cd ../
-
-      - name: Remove Previous Build Artifacts
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          ARTIFACTS=$(gh api repos/${{ github.repository }}/actions/artifacts --jq '.artifacts[].id')
-          for ARTIFACT_ID in $ARTIFACTS; do
-            gh api -X DELETE repos/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID
-          done
-
       - name: Upload Backend Build
         uses: actions/upload-artifact@v4
         with:
@@ -63,6 +72,33 @@ jobs:
           path: |
             backend/build/libs/backend-all.jar
           retention-days: 1
+
+  build-gateway:
+    name: Build Services ${{ github.event.release.tag_name }}
+    needs:
+      - remove-artifacts
+    runs-on: ubuntu-24.04
+    environment: "docker-hub"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+      - name: Change wrapper permissions
+        run: chmod +x ./gateway/gradlew
+
+      - name: Build Gateway
+        run: cd gateway && gradle buildFatJar --no-daemon && cd ../
 
       - name: Upload Gateway Build
         uses: actions/upload-artifact@v4
@@ -76,7 +112,8 @@ jobs:
     name: Deploy Image [${{ matrix.arch }}]
     runs-on: ubuntu-24.04
     needs:
-      - build
+      - build-backend
+      - build-gateway
     strategy:
       fail-fast: false
       matrix:
