@@ -51,7 +51,11 @@ class DefaultClientService(
         val clientId = UUID.randomUUID()
         val newSecret = Utils.randomNumberGenerator(32)
         oauthClientDTO.clientId = clientId.toString()
-        oauthClientDTO.clientSecret = newSecret
+        oauthClientDTO.clientSecret =
+            BCrypt.withDefaults().hashToString(
+                12,
+                newSecret.toCharArray(),
+            )
 
         return when (val result = clientRepository.save(oauthClientDTO = oauthClientDTO, call = call)) {
             is ClientDto -> {
@@ -87,17 +91,17 @@ class DefaultClientService(
             is ClientDto -> {
                 val newSecret = Utils.randomNumberGenerator(32)
                 if (isNewSecret) {
-                    oauthClientDTO.clientSecret = newSecret
+                    oauthClientDTO.clientSecret =
+                        BCrypt.withDefaults().hashToString(
+                            12,
+                            newSecret.toCharArray(),
+                        )
                 }
 
                 when (val result = clientRepository.update(oauthClientDTO = oauthClientDTO, call = call)) {
                     is ClientDto -> {
                         if (isNewSecret) {
-                            result.newSecret =
-                                BCrypt.withDefaults().hashToString(
-                                    12,
-                                    newSecret.toCharArray(),
-                                )
+                            result.newSecret = newSecret
                         }
                         CallResult.Success(result)
                     }
