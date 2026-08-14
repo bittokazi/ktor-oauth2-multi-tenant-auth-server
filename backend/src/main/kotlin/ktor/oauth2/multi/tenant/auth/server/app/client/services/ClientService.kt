@@ -1,6 +1,5 @@
 package ktor.oauth2.multi.tenant.auth.server.app.client.services
 
-import at.favre.lib.crypto.bcrypt.BCrypt
 import io.ktor.server.application.ApplicationCall
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.CallResult
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.ClientDto
@@ -51,11 +50,7 @@ class DefaultClientService(
         val clientId = UUID.randomUUID()
         val newSecret = Utils.randomNumberGenerator(32)
         oauthClientDTO.clientId = clientId.toString()
-        oauthClientDTO.clientSecret =
-            BCrypt.withDefaults().hashToString(
-                12,
-                newSecret.toCharArray(),
-            )
+        oauthClientDTO.clientSecret = newSecret
 
         return when (val result = clientRepository.save(oauthClientDTO = oauthClientDTO, call = call)) {
             is ClientDto -> {
@@ -91,11 +86,7 @@ class DefaultClientService(
             is ClientDto -> {
                 val newSecret = Utils.randomNumberGenerator(32)
                 if (isNewSecret) {
-                    oauthClientDTO.clientSecret =
-                        BCrypt.withDefaults().hashToString(
-                            12,
-                            newSecret.toCharArray(),
-                        )
+                    oauthClientDTO.clientSecret = newSecret
                 }
 
                 when (val result = clientRepository.update(oauthClientDTO = oauthClientDTO, call = call)) {

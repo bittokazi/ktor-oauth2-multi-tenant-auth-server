@@ -145,7 +145,11 @@ class ClientRepository(
                     it[OAuthClients.refreshTokenValidity] = oauthClientDTO.refreshTokenValidity
                     it[OAuthClients.consentRequired] = oauthClientDTO.consentRequired
                     if (oauthClientDTO.clientSecret != null) {
-                        it[OAuthClients.clientSecret] = oauthClientDTO.clientSecret
+                        it[OAuthClients.clientSecret] =
+                            BCrypt.withDefaults().hashToString(
+                                12,
+                                oauthClientDTO.clientSecret!!.toCharArray(),
+                            )
                     }
                 }
 
