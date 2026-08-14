@@ -77,30 +77,34 @@ class LoginOptionServiceImpl(
     }
 
     override suspend fun completeLogin(call: ApplicationCall) {
-        val originalUrl = call.sessions.get("OAUTH_ORIGINAL_URL")
-        if (originalUrl != null) {
-            call.sessions.clear("OAUTH_ORIGINAL_URL")
-            call.respondRedirect(originalUrl.toString())
-        } else {
-            val session = call.sessions.get<OauthRedirectUrlSession>()
-            if (session != null) {
-                call.sessions.clear("OAUTH2_REDIRECT_URL")
-                call.respondRedirect(session.redirectUrl)
+        try {
+            val originalUrl = call.sessions.get("OAUTH_ORIGINAL_URL")
+            if (originalUrl != null) {
+                call.sessions.clear("OAUTH_ORIGINAL_URL")
+                call.respondRedirect(originalUrl.toString())
             } else {
-                val tenant = call.attributes[AttributeKey<String>(AppConfig.TENANT_ATTRIBUTE_KEY)]
-                if (tenant == "public") {
-                    call.respondRedirect(fallbackAfterLoginRedirectUrl) // fallback
+                val session = call.sessions.get<OauthRedirectUrlSession>()
+                if (session != null) {
+                    call.sessions.clear("OAUTH2_REDIRECT_URL")
+                    call.respondRedirect(session.redirectUrl)
                 } else {
-                    tenantRepository.findOneByCompanyKey(tenant)?.let {
-                        it.defaultRedirectUrl?.let { redirectUrl ->
-                            when (redirectUrl) {
-                                "" -> call.respondRedirect(fallbackAfterLoginRedirectUrl)
-                                else -> call.respondRedirect(redirectUrl)
-                            }
+                    val tenant = call.attributes[AttributeKey<String>(AppConfig.TENANT_ATTRIBUTE_KEY)]
+                    if (tenant == "public") {
+                        call.respondRedirect(fallbackAfterLoginRedirectUrl) // fallback
+                    } else {
+                        tenantRepository.findOneByCompanyKey(tenant)?.let {
+                            it.defaultRedirectUrl?.let { redirectUrl ->
+                                when (redirectUrl) {
+                                    "" -> call.respondRedirect(fallbackAfterLoginRedirectUrl)
+                                    else -> call.respondRedirect(redirectUrl)
+                                }
+                            } ?: call.respondRedirect(fallbackAfterLoginRedirectUrl)
                         } ?: call.respondRedirect(fallbackAfterLoginRedirectUrl)
-                    } ?: call.respondRedirect(fallbackAfterLoginRedirectUrl)
+                    }
                 }
             }
+        } catch (e: UnsupportedOperationException) {
+            // Handle the exception if needed
         }
     }
 }
