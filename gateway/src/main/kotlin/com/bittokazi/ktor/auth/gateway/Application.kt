@@ -12,5 +12,6 @@ fun main(args: Array<String>) {
 fun Application.module() {
     install(GatewayPlugin) {
         sessionValidityInSeconds = 3600
+        configureHttp = false
     }
 }
