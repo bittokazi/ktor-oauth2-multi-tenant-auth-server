@@ -1,6 +1,5 @@
 package ktor.oauth2.multi.tenant.auth.server.app.client.services
 
-import at.favre.lib.crypto.bcrypt.BCrypt
 import io.ktor.server.application.ApplicationCall
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.CallResult
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.ClientDto
@@ -93,11 +92,7 @@ class DefaultClientService(
                 when (val result = clientRepository.update(oauthClientDTO = oauthClientDTO, call = call)) {
                     is ClientDto -> {
                         if (isNewSecret) {
-                            result.newSecret =
-                                BCrypt.withDefaults().hashToString(
-                                    12,
-                                    newSecret.toCharArray(),
-                                )
+                            result.newSecret = newSecret
                         }
                         CallResult.Success(result)
                     }
