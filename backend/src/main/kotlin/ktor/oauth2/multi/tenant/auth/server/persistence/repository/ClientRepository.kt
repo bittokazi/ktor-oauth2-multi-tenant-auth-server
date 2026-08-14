@@ -1,5 +1,6 @@
 package ktor.oauth2.multi.tenant.auth.server.persistence.repository
 
+import at.favre.lib.crypto.bcrypt.BCrypt
 import com.bittokazi.ktor.auth.services.providers.database.OAuthClients
 import io.ktor.server.application.ApplicationCall
 import ktor.oauth2.multi.tenant.auth.server.database.config.MultiTenantDatabaseConfiguration
@@ -11,6 +12,7 @@ import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
 import java.util.UUID
 import kotlin.text.split
+import kotlin.text.toCharArray
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.toKotlinUuid
 
@@ -76,7 +78,11 @@ class ClientRepository(
                 OAuthClients.insert {
                     it[OAuthClients.id] = id
                     it[OAuthClients.clientId] = oauthClientDTO.clientId!!
-                    it[OAuthClients.clientSecret] = oauthClientDTO.clientSecret
+                    it[OAuthClients.clientSecret] =
+                        BCrypt.withDefaults().hashToString(
+                            12,
+                            oauthClientDTO.clientSecret!!.toCharArray(),
+                        )
                     it[OAuthClients.clientName] = oauthClientDTO.clientName
                     it[OAuthClients.clientType] = oauthClientDTO.clientType!!
                     it[OAuthClients.redirectUris] = oauthClientDTO.redirectUris.joinToString(",")
