@@ -16,5 +16,6 @@ data class Client(
     var refreshTokenValidity: Long = 7200,
     var isDefault: Boolean = false,
     var consentRequired: Boolean = true,
-    var newSecret: String? = null
+    var newSecret: String? = null,
+    var postLogoutRedirectUri: String? = null,
 )

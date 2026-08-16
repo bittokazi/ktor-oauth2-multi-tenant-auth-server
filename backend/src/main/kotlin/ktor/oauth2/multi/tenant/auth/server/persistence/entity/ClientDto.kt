@@ -17,4 +17,5 @@ data class ClientDto(
     var isDefault: Boolean = false,
     var consentRequired: Boolean = true,
     var newSecret: String? = null,
+    var postLogoutRedirectUri: String? = null,
 )

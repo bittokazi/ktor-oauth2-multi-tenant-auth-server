@@ -110,6 +110,15 @@ fun Container.clientFormComponent(
                     )
                 )
             }
+            div(className = "col-md-6") {
+                add(
+                    textInputComponent(
+                        clientForm.postLogoutRedirectUri,
+                        client?.postLogoutRedirectUri ?: ""
+                    )
+                )
+            }
+            div(className = "col-md-6") {}
             div(className = "col-md-3") {
                 add(switchInputComponent(clientForm.requireConsent, client?.consentRequired == true))
             }
@@ -261,6 +270,14 @@ class ClientForm(update: Boolean) : FormControl<Unit, Unit> {
         it != 0
     }
 
+    val postLogoutRedirectUri = FormTextInput(
+        label = "Post Logout Redirect URL",
+        placeholder = "Keep it blank to use default",
+        defaultInvalidFeedback = "Missing input"
+    ) {
+        return@FormTextInput true
+    }
+
     val submitButton = FormButton()
 
     override fun setInput(input: Unit) {}
@@ -278,6 +295,7 @@ class ClientForm(update: Boolean) : FormControl<Unit, Unit> {
                 && requireConsent.isValid()
                 && generateSecret.isValid()
                 && clientType.isValid()
+                && postLogoutRedirectUri.isValid()
     }
 
     override fun setCustomError(message: String) {}
@@ -293,6 +311,7 @@ class ClientForm(update: Boolean) : FormControl<Unit, Unit> {
         requireConsent.enforceValidation()
         generateSecret.enforceValidation()
         clientType.enforceValidation()
+        postLogoutRedirectUri.enforceValidation()
     }
 
     override fun getValue() {}
@@ -308,6 +327,7 @@ class ClientForm(update: Boolean) : FormControl<Unit, Unit> {
         if (requireConsent.isValid()) requireConsent.enforceValidation()
         if (generateSecret.isValid()) generateSecret.enforceValidation()
         if (clientType.isValid()) clientType.enforceValidation()
+        if (postLogoutRedirectUri.isValid()) clientType.enforceValidation()
     }
 }
 
