@@ -39,7 +39,8 @@ class ClientAddComponent: SimplePanel() {
                                 refreshTokenValidity = clientForm.refreshTokenValidity.getValue().toLong(),
                                 consentRequired = clientForm.requireConsent.getValue(),
                                 clientType = clientForm.clientType.getValue()!!,
-                                isDefault = false
+                                isDefault = false,
+                                postLogoutRedirectUri = clientForm.clientType.getValue(),
                             )
                         ).then {
                             sweetAlert.fire(

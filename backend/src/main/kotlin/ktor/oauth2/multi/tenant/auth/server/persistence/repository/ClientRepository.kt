@@ -40,6 +40,7 @@ class ClientRepository(
                         refreshTokenValidity = it[OAuthClients.refreshTokenValidity],
                         isDefault = it[OAuthClients.isDefault],
                         consentRequired = it[OAuthClients.consentRequired],
+                        postLogoutRedirectUri = it[OAuthClients.postLogoutRedirectUri],
                     )
                 }.singleOrNull()
         }
@@ -64,6 +65,7 @@ class ClientRepository(
                         refreshTokenValidity = it[OAuthClients.refreshTokenValidity],
                         isDefault = it[OAuthClients.isDefault],
                         consentRequired = it[OAuthClients.consentRequired],
+                        postLogoutRedirectUri = it[OAuthClients.postLogoutRedirectUri],
                     )
                 }.singleOrNull()
         }
@@ -93,6 +95,10 @@ class ClientRepository(
                     it[OAuthClients.refreshTokenValidity] = oauthClientDTO.refreshTokenValidity
                     it[OAuthClients.isDefault] = false
                     it[OAuthClients.consentRequired] = oauthClientDTO.consentRequired
+                    when (oauthClientDTO.postLogoutRedirectUri.isNullOrBlank()) {
+                        true -> it[OAuthClients.postLogoutRedirectUri] = null
+                        false -> it[OAuthClients.postLogoutRedirectUri] = oauthClientDTO.postLogoutRedirectUri
+                    }
                 }
             if (inserted.insertedCount > 0) {
                 findOneById(id.toString(), call)
@@ -119,6 +125,7 @@ class ClientRepository(
                         refreshTokenValidity = it[OAuthClients.refreshTokenValidity],
                         isDefault = it[OAuthClients.isDefault],
                         consentRequired = it[OAuthClients.consentRequired],
+                        postLogoutRedirectUri = it[OAuthClients.postLogoutRedirectUri],
                     )
                 }.toList()
         }
@@ -150,6 +157,10 @@ class ClientRepository(
                                 12,
                                 oauthClientDTO.clientSecret!!.toCharArray(),
                             )
+                    }
+                    when (oauthClientDTO.postLogoutRedirectUri.isNullOrBlank()) {
+                        true -> it[OAuthClients.postLogoutRedirectUri] = null
+                        false -> it[OAuthClients.postLogoutRedirectUri] = oauthClientDTO.postLogoutRedirectUri
                     }
                 }
 

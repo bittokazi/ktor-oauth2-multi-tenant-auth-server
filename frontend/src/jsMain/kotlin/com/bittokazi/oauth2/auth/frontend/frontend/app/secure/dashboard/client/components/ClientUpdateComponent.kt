@@ -44,6 +44,7 @@ class ClientUpdateComponent (
                                     refreshTokenValidity = clientForm.refreshTokenValidity.getValue().toLong(),
                                     consentRequired = clientForm.requireConsent.getValue(),
                                     clientType = clientForm.clientType.getValue()!!,
+                                    postLogoutRedirectUri = clientForm.postLogoutRedirectUri.getValue(),
                                 ),
                                 clientForm.generateSecret.getValue()
                             ).then { updateResponse ->
