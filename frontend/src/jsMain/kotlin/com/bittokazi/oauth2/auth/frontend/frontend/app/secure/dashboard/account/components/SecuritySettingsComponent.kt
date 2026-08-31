@@ -405,8 +405,9 @@ class SecuritySettingsComponent: SimplePanel() {
                                                                         js("new bootstrap.Modal('#twoFa')")
                                                                     }
                                                                     document.getElementById("qrcode")!!.innerHTML = QrCodeService.create(
-                                                                        "otpauth://totp/${window.location.protocol}//${window.location.host}" +
-                                                                                ":${user.email}?secret=${twoFASecretPayload.secret}"
+                                                                        "otpauth://totp/${window.location.host}" +
+                                                                                ":${user.email}?secret=${twoFASecretPayload.secret}" +
+                                                                                "&issuer=${window.location.host}"
                                                                     )
                                                                 }, 300)
                                                                 window.setTimeout({
