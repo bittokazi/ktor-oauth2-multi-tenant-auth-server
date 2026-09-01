@@ -1,6 +1,5 @@
 package ktor.oauth2.multi.tenant.auth.server.app.cpanel.controllers
 
-import com.bittokazi.ktor.auth.services.TemplateCustomizerFactory
 import com.github.mustachejava.DefaultMustacheFactory
 import io.ktor.http.ContentType
 import io.ktor.server.application.Application
@@ -21,7 +20,6 @@ fun Application.cpanelRoutes() {
     val log: Logger = LoggerFactory.getLogger(javaClass)
 
     val appModuleConfiguration: AppModuleConfiguration by dependencies
-    val templateCustomizerFactory: TemplateCustomizerFactory by dependencies
 
     routing {
         staticResources("/app-static", "static/cpanel")
