@@ -1,7 +1,6 @@
 package ktor.oauth2.multi.tenant.auth.server.app.cpanel.controllers
 
 import com.bittokazi.ktor.auth.services.TemplateCustomizerFactory
-import com.bittokazi.ktor.auth.utils.respondMustache
 import com.github.mustachejava.DefaultMustacheFactory
 import io.ktor.http.ContentType
 import io.ktor.server.application.Application
