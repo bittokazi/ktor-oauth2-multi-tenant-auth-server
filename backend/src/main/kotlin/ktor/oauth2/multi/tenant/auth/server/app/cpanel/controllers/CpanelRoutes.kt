@@ -53,14 +53,6 @@ fun Application.cpanelRoutes() {
                 mapOf<String, Any>(),
             )
         }
-
-        get("/app/{...}") {
-            call.respondMustache(
-                templateCustomizerFactory,
-                "cpanel.hbs",
-                mapOf<String, Any>(),
-            )
-        }
     }
 
     log.info("[cpanelRoutes] -> Routes configured.")
