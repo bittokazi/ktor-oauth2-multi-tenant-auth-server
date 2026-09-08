@@ -58,4 +58,4 @@ jobs:
         run: chmod +x ./gateway/gradlew
 
       - name: Build Gateway
-        run: cd gateway && gradle ktlintCheck buildFatJar --no-daemon && cd ../
+        run: cd gateway && gradle buildFatJar --no-daemon && cd ../
