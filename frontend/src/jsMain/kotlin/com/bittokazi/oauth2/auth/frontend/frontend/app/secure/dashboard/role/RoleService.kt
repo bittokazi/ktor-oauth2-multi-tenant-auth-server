@@ -2,7 +2,6 @@ package com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.role
 
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.restService
 import com.bittokazi.oauth2.auth.frontend.frontend.base.models.Role
-import com.bittokazi.oauth2.auth.frontend.frontend.base.models.RoleList
 import io.kvision.rest.HttpMethod
 import io.kvision.rest.RestResponse
 import io.kvision.rest.request
@@ -12,11 +11,9 @@ import kotlinx.serialization.json.encodeToDynamic
 import kotlin.js.Promise
 
 object RoleService {
-
     val roleBaseUrl = "${restService.BASE_URL}/api/v1/roles"
 
     fun getAll(): Promise<RestResponse<List<Role>>> {
-
         return restService.createAuthCall {
             restService.getClient().request<List<Role>>(roleBaseUrl) {
                 method = HttpMethod.GET

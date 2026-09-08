@@ -20,7 +20,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToDynamic
 
 @OptIn(ExperimentalSerializationApi::class)
-class MyProfileComponent: SimplePanel() {
+class MyProfileComponent : SimplePanel() {
     val userForm = UserForm(update = true, self = true)
     lateinit var user: User
 
@@ -32,7 +32,7 @@ class MyProfileComponent: SimplePanel() {
                         label = "",
                         url = APP_DASHBOARD_ACCOUNT_SETTINGS_ROUTE,
                         className = "nav-link active",
-                        dataNavigo = true
+                        dataNavigo = true,
                     ) {
                         span(className = "feather-sm me-1") {
                             setAttribute("data-feather", "user")
@@ -43,7 +43,7 @@ class MyProfileComponent: SimplePanel() {
                         label = "",
                         url = APP_DASHBOARD_ACCOUNT_SECURITY_ROUTE,
                         className = "nav-link",
-                        dataNavigo = true
+                        dataNavigo = true,
                     ) {
                         span(className = "feather-sm me-1") {
                             setAttribute("data-feather", "lock")
@@ -62,7 +62,7 @@ class MyProfileComponent: SimplePanel() {
                                     userForm = userForm,
                                     user = userResponse.data,
                                     update = true,
-                                    self = true
+                                    self = true,
                                 ) {
                                     when (userForm.isValid()) {
                                         true -> {
@@ -72,17 +72,17 @@ class MyProfileComponent: SimplePanel() {
                                                     firstName = userForm.firstName.getValue(),
                                                     lastName = userForm.lastName.getValue(),
                                                     email = userForm.email.getValue(),
-                                                    roles = user.roles
-                                                )
+                                                    roles = user.roles,
+                                                ),
                                             ).then {
                                                 sweetAlert.fire(
                                                     Json.encodeToDynamic(
                                                         mapOf(
                                                             "title" to "Success",
                                                             "text" to "Account Updated Successfully.",
-                                                            "icon" to "success"
-                                                        )
-                                                    )
+                                                            "icon" to "success",
+                                                        ),
+                                                    ),
                                                 )
                                                 userFormErrorHandler(null, userForm)
                                                 AppEngine.authService.user = it.data
@@ -101,7 +101,6 @@ class MyProfileComponent: SimplePanel() {
                                             }
                                         }
                                         false -> {
-
                                         }
                                     }
                                 }
@@ -111,9 +110,9 @@ class MyProfileComponent: SimplePanel() {
                                         mapOf(
                                             "title" to "Error",
                                             "text" to "Error while fetching user",
-                                            "icon" to "error"
-                                        )
-                                    )
+                                            "icon" to "error",
+                                        ),
+                                    ),
                                 )
                             }
                         }

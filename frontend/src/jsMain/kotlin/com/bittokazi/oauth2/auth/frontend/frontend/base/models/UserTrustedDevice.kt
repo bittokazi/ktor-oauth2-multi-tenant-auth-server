@@ -10,5 +10,5 @@ data class UserTrustedDevice(
     var deviceIp: String? = null,
     var userAgent: String? = null,
     val createdDate: String?,
-    var updatedDate: String?
+    var updatedDate: String?,
 )

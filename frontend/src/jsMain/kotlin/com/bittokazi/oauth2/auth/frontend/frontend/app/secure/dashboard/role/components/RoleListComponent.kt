@@ -16,8 +16,7 @@ import io.kvision.panel.SimplePanel
 import kotlinx.browser.window
 import org.w3c.dom.get
 
-class RoleListComponent: SimplePanel() {
-
+class RoleListComponent : SimplePanel() {
     init {
         div(className = "table-responsive") {
             table(className = "table table-hover my-0") {
@@ -39,7 +38,7 @@ class RoleListComponent: SimplePanel() {
                 }
                 tbody {
                     RoleService.getAll().then {
-                        it.data.forEachIndexed {  index, role ->
+                        it.data.forEachIndexed { index, role ->
                             tr {
                                 td {
                                     content = "${index + 1}"
@@ -54,14 +53,14 @@ class RoleListComponent: SimplePanel() {
                                     link(
                                         "",
                                         AppEngine.APP_DASHBOARD_ROLE_UPDATE_ROUTE(
-                                            role.id!!
+                                            role.id!!,
                                         ),
-                                        dataNavigo = true
+                                        dataNavigo = true,
                                     ) {
                                         span(className = "feather-sm me-1") {
                                             setAttribute("data-feather", "edit")
                                         }
-                                        + " Edit"
+                                        +" Edit"
                                     }
                                 }
                             }

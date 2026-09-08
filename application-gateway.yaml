@@ -1,0 +1,13 @@
+ktor:
+  application:
+    modules:
+      - com.bittokazi.ktor.auth.gateway.ApplicationKt.module
+  deployment:
+    port: 5035
+
+proxy:
+  enabled: true
+  routes:
+    "":
+      - prefix: /
+        target: http://127.0.0.1:8081

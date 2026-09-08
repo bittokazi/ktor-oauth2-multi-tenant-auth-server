@@ -5,8 +5,11 @@ import com.bittokazi.kvision.spa.framework.base.services.LogoutActionProvider
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.APP_LOGIN_ROUTE
 import kotlinx.browser.window
 
-class DefaultLogoutActionProvider: LogoutActionProvider {
-    override fun logout(oauth2LoginPage: Boolean, fullLogout: Boolean) {
+class DefaultLogoutActionProvider : LogoutActionProvider {
+    override fun logout(
+        oauth2LoginPage: Boolean,
+        fullLogout: Boolean,
+    ) {
         if (fullLogout) {
             window.location.href = "/oauth/logout"
             return

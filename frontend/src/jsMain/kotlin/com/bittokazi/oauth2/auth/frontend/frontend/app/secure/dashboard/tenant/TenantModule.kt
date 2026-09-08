@@ -9,26 +9,27 @@ import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.APP_DAS
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.APP_DASHBOARD_TENANT_ROUTE
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.APP_DASHBOARD_TENANT_UPDATE_ROUTE
 
-fun tenantModule() = DefaultSecuredPageModule(
-    RouterConfiguration(
-        route = APP_DASHBOARD_TENANT_ROUTE,
-        title = "All Tenants",
-        view = {
-            TenantListComponent()
-        }
-    ),
-    RouterConfiguration(
-        route = APP_DASHBOARD_TENANT_ADD_ROUTE,
-        title = "Add Tenant",
-        view = {
-            TenantAddComponent()
-        }
-    ),
-    RouterConfiguration(
-        route = APP_DASHBOARD_TENANT_UPDATE_ROUTE(":id"),
-        title = "Update Tenant",
-        view = {
-            TenantUpdateComponent(it.data.id)
-        }
+fun tenantModule() =
+    DefaultSecuredPageModule(
+        RouterConfiguration(
+            route = APP_DASHBOARD_TENANT_ROUTE,
+            title = "All Tenants",
+            view = {
+                TenantListComponent()
+            },
+        ),
+        RouterConfiguration(
+            route = APP_DASHBOARD_TENANT_ADD_ROUTE,
+            title = "Add Tenant",
+            view = {
+                TenantAddComponent()
+            },
+        ),
+        RouterConfiguration(
+            route = APP_DASHBOARD_TENANT_UPDATE_ROUTE(":id"),
+            title = "Update Tenant",
+            view = {
+                TenantUpdateComponent(it.data.id)
+            },
+        ),
     )
-)

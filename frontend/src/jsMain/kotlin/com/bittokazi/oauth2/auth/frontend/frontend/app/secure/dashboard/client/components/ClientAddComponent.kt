@@ -15,14 +15,14 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToDynamic
 
 @OptIn(ExperimentalSerializationApi::class)
-class ClientAddComponent: SimplePanel() {
+class ClientAddComponent : SimplePanel() {
     val clientForm = ClientForm(update = false)
 
     init {
         div {
             clientFormComponent(
                 clientForm = clientForm,
-                client = null
+                client = null,
             ) {
                 when (clientForm.isValid()) {
                     true -> {
@@ -31,17 +31,19 @@ class ClientAddComponent: SimplePanel() {
                                 clientId = clientForm.clientId.getValue(),
                                 clientName = clientForm.clientName.getValue(),
                                 scopes = clientForm.scope.getValue().split(",").map { it.trim() },
-                                grantTypes = clientForm.authorizedGrantTypes.getValue().split(",")
-                                    .map { it.trim() },
-                                redirectUris = clientForm.webServerRedirectUri.getValue().split(",")
-                                    .map { it.trim() },
+                                grantTypes =
+                                    clientForm.authorizedGrantTypes.getValue().split(",")
+                                        .map { it.trim() },
+                                redirectUris =
+                                    clientForm.webServerRedirectUri.getValue().split(",")
+                                        .map { it.trim() },
                                 accessTokenValidity = clientForm.accessTokenValidity.getValue().toLong(),
                                 refreshTokenValidity = clientForm.refreshTokenValidity.getValue().toLong(),
                                 consentRequired = clientForm.requireConsent.getValue(),
                                 clientType = clientForm.clientType.getValue()!!,
                                 isDefault = false,
                                 postLogoutRedirectUri = clientForm.clientType.getValue(),
-                            )
+                            ),
                         ).then {
                             sweetAlert.fire(
                                 Json.encodeToDynamic(
@@ -53,13 +55,13 @@ class ClientAddComponent: SimplePanel() {
                                         "confirmButtonText" to "Dismiss",
                                         "allowOutsideClick" to null,
                                         "html" to "<p style=\"text-align: justify\">" +
-                                                "New Client Id and Secret Generated<br />" +
-                                                "<span style=\"font-weight: bold;\">" +
-                                                "ID:</span>&nbsp;${it.data.clientId}<br />" +
-                                                "<span style=\"font-weight: bold;\">" +
-                                                "Secret:</span>&nbsp;${it.data.newSecret}</p>"
-                                    )
-                                )
+                                            "New Client Id and Secret Generated<br />" +
+                                            "<span style=\"font-weight: bold;\">" +
+                                            "ID:</span>&nbsp;${it.data.clientId}<br />" +
+                                            "<span style=\"font-weight: bold;\">" +
+                                            "Secret:</span>&nbsp;${it.data.newSecret}</p>",
+                                    ),
+                                ),
                             )
                             SpaAppEngine.routing.navigate(APP_DASHBOARD_CLIENT_ROUTE)
                         }.catch { throwable ->
@@ -67,7 +69,6 @@ class ClientAddComponent: SimplePanel() {
                         }
                     }
                     false -> {
-
                     }
                 }
             }

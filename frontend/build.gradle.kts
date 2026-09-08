@@ -4,6 +4,9 @@ plugins {
     kotlin("multiplatform") version kotlinVersion
     val kvisionVersion: String by System.getProperties()
     id("io.kvision") version kvisionVersion
+
+    // linter
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
 }
 
 version = "1.0.0-SNAPSHOT"

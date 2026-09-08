@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to IDP Cloud</title>
+    <link rel="stylesheet" href="{{resourceBase}}/css/style.css">
+</head>
+<body>
+<div class="login-container">
+    <h2>Login to IDP Cloud</h2>
+
+    {{#error}}
+        <div class="error" id="errorMessage">{{errorMessage}}</div>
+    {{/error}}
+
+    <form method="POST" action="/oauth/login">
+        <input type="hidden" name="redirect" value="{{redirect}}" />
+
+        <input type="text" name="username" placeholder="Email" required autofocus>
+        <input type="password" name="password" placeholder="Password" required>
+
+        <div class="remember-me">
+            <input type="checkbox" id="remember" name="rememberMe" value="true">
+            <label for="remember">Remember me</label>
+        </div>
+
+        <button type="submit">Login</button>
+
+        <p style="text-align: center;">
+            <br />
+            <a style="text-decoration: none;" href="/app/login">Go Back</a>
+        </p>
+    </form>
+</div>
+</body>
+</html>
+

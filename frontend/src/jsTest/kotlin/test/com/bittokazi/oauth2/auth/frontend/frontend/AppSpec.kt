@@ -5,7 +5,6 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class AppSpec : SimpleSpec {
-
     @Test
     fun render() {
         run {

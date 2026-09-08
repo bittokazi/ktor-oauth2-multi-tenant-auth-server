@@ -29,9 +29,8 @@ fun Container.tenantFormComponent(
     update: Boolean = false,
     tenantForm: TenantForm,
     tenant: Tenant?,
-    submitCallback: (JsonObject?) -> Unit
+    submitCallback: (JsonObject?) -> Unit,
 ): Container {
-
     var errorDiv: Div? = null
 
     val errorMessage: ObservableValue<String> = ObservableValue("")
@@ -39,21 +38,22 @@ fun Container.tenantFormComponent(
     val uploadFile: ((fn: (JsonObject?) -> Unit) -> Unit) = { fn ->
         when (tenantForm.customTemplateLocation.input.value) {
             null -> fn(null)
-            else -> SpaAppEngine.fileService.upload(
-                fileName = tenantForm.companyKey.getValue(),
-                uploadInput = tenantForm.customTemplateLocation.input,
-                url = "${restService.BASE_URL}/api/v1/tenants/${tenant!!.id}/templates"
-            ) {
-                console.log("[upload response] -> ${it}")
+            else ->
+                SpaAppEngine.fileService.upload(
+                    fileName = tenantForm.companyKey.getValue(),
+                    uploadInput = tenantForm.customTemplateLocation.input,
+                    url = "${restService.BASE_URL}/api/v1/tenants/${tenant!!.id}/templates",
+                ) {
+                    console.log("[upload response] -> $it")
 
-                when (it) {
-                    is SpaResult.Failure -> {
-                        tenantForm.submitButton.resetInput()
-                        errorMessage.setState("Unable to upload file [Server Error]")
+                    when (it) {
+                        is SpaResult.Failure -> {
+                            tenantForm.submitButton.resetInput()
+                            errorMessage.setState("Unable to upload file [Server Error]")
+                        }
+                        is SpaResult.Success -> fn(it.outcome)
                     }
-                    is SpaResult.Success -> fn(it.outcome)
                 }
-            }
         }
     }
 
@@ -63,7 +63,7 @@ fun Container.tenantFormComponent(
             errorMessage.setState("")
         }
 
-        if(!tenantForm.isValid()) {
+        if (!tenantForm.isValid()) {
             errorMessage.setState("Invalid Input")
             tenantForm.enforceValidation()
         } else {
@@ -95,8 +95,8 @@ fun Container.tenantFormComponent(
                     textInputComponent(
                         tenantForm.companyKey,
                         tenant?.companyKey ?: "",
-                        disabledInput = update
-                    )
+                        disabledInput = update,
+                    ),
                 )
             }
             div(className = "col-md-6") {
@@ -136,23 +136,24 @@ fun Container.tenantFormComponent(
                         when (update) {
                             true -> "Update"
                             false -> "Add"
-                        }
-                    )
+                        },
+                    ),
                 )
             }
             div(className = "col-md-9")
             div(className = "col-md-3") {
                 window.setTimeout({
-                    if(errorDiv == null) {
-                        errorDiv = Div(className = "alert alert-danger align-items-center") {
-                            marginTop = 10 to UNIT.px
-                            setAttribute("role", "alert")
-                            div {
-                                errorMessage.subscribe {
-                                    content = it
+                    if (errorDiv == null) {
+                        errorDiv =
+                            Div(className = "alert alert-danger align-items-center") {
+                                marginTop = 10 to UNIT.px
+                                setAttribute("role", "alert")
+                                div {
+                                    errorMessage.subscribe {
+                                        content = it
+                                    }
                                 }
                             }
-                        }
                         add(errorDiv!!)
                         errorDiv?.getElementJQuery()?.hide(0)
                     }
@@ -169,94 +170,104 @@ fun Container.tenantFormComponent(
 }
 
 class TenantForm : FormControl<Unit, Unit> {
-
-    val name = FormTextInput(
-        label = "Name",
-        placeholder = "Enter tenant name",
-        defaultInvalidFeedback = "Name missing"
-    ) {
-        return@FormTextInput !(it == null || it.isEmpty())
-    }
-
-    val companyKey = FormTextInput(
-        label = "Key",
-        placeholder = "Enter unique tenant key here",
-        defaultInvalidFeedback = "Valid characters are [a-z, 0-9 and _]"
-    ) {
-        if(it == null) {
-            return@FormTextInput false
+    val name =
+        FormTextInput(
+            label = "Name",
+            placeholder = "Enter tenant name",
+            defaultInvalidFeedback = "Name missing",
+        ) {
+            return@FormTextInput !(it == null || it.isEmpty())
         }
-        val regex = "^[a-z0-9](?:_[a-z0-9]+|[a-z0-9])*\$".toRegex()
-        return@FormTextInput regex.matches(it)
-    }
 
-    val domain = FormTextInput(
-        label = "Domain",
-        placeholder = "Enter domain name",
-        defaultInvalidFeedback = "Invalid domain name"
-    ) {
-        return@FormTextInput !(it == null || it.length < 5)
-    }
+    val companyKey =
+        FormTextInput(
+            label = "Key",
+            placeholder = "Enter unique tenant key here",
+            defaultInvalidFeedback = "Valid characters are [a-z, 0-9 and _]",
+        ) {
+            if (it == null) {
+                return@FormTextInput false
+            }
+            val regex = "^[a-z0-9](?:_[a-z0-9]+|[a-z0-9])*\$".toRegex()
+            return@FormTextInput regex.matches(it)
+        }
 
-    val signInBtnColor = FormTextInput(
-        label = "Sign In Button Color",
-        placeholder = "Please enter valid button color",
-        defaultInvalidFeedback = "Invalid color"
-    ) {
-        return@FormTextInput true
-    }
+    val domain =
+        FormTextInput(
+            label = "Domain",
+            placeholder = "Enter domain name",
+            defaultInvalidFeedback = "Invalid domain name",
+        ) {
+            return@FormTextInput !(it == null || it.length < 5)
+        }
 
-    val resetPasswordLink = FormTextInput(
-        label = "Reset Password Link",
-        placeholder = "Leave blank if you don't want to show",
-        defaultInvalidFeedback = "Invalid link"
-    ) {
-        return@FormTextInput true
-    }
+    val signInBtnColor =
+        FormTextInput(
+            label = "Sign In Button Color",
+            placeholder = "Please enter valid button color",
+            defaultInvalidFeedback = "Invalid color",
+        ) {
+            return@FormTextInput true
+        }
 
-    val createAccountLink = FormTextInput(
-        label = "Create Account Link",
-        placeholder = "Leave blank if you don't want to show",
-        defaultInvalidFeedback = "Invalid link"
-    ) {
-        return@FormTextInput true
-    }
+    val resetPasswordLink =
+        FormTextInput(
+            label = "Reset Password Link",
+            placeholder = "Leave blank if you don't want to show",
+            defaultInvalidFeedback = "Invalid link",
+        ) {
+            return@FormTextInput true
+        }
 
-    val enabled = FormSwitchInput(
-        label = "Tenant Enabled",
-        defaultInvalidFeedback = "Invalid Settings"
-    ) {
-        return@FormSwitchInput it != null
-    }
+    val createAccountLink =
+        FormTextInput(
+            label = "Create Account Link",
+            placeholder = "Leave blank if you don't want to show",
+            defaultInvalidFeedback = "Invalid link",
+        ) {
+            return@FormTextInput true
+        }
 
-    val defaultRedirectUrl = FormTextInput(
-        label = "Default Redirect URL",
-        placeholder = "Default redirect link after login",
-        defaultInvalidFeedback = "Invalid URL"
-    ) {
-        return@FormTextInput true
-    }
+    val enabled =
+        FormSwitchInput(
+            label = "Tenant Enabled",
+            defaultInvalidFeedback = "Invalid Settings",
+        ) {
+            return@FormSwitchInput it != null
+        }
 
-    val enableConfigPanel = FormSwitchInput(
-        label = "Enabled Config Panel",
-        defaultInvalidFeedback = "Invalid Settings"
-    ) {
-        return@FormSwitchInput it != null
-    }
+    val defaultRedirectUrl =
+        FormTextInput(
+            label = "Default Redirect URL",
+            placeholder = "Default redirect link after login",
+            defaultInvalidFeedback = "Invalid URL",
+        ) {
+            return@FormTextInput true
+        }
 
-    val enableCustomTemplate = FormSwitchInput(
-        label = "Enabled Custom Template",
-        defaultInvalidFeedback = "Invalid Settings"
-    ) {
-        return@FormSwitchInput it != null
-    }
+    val enableConfigPanel =
+        FormSwitchInput(
+            label = "Enabled Config Panel",
+            defaultInvalidFeedback = "Invalid Settings",
+        ) {
+            return@FormSwitchInput it != null
+        }
 
-    val customTemplateLocation = FormUploadInput(
-        label = "Custom Template File",
-        accept = listOf(".zip")
-    ) {
-        return@FormUploadInput true
-    }
+    val enableCustomTemplate =
+        FormSwitchInput(
+            label = "Enabled Custom Template",
+            defaultInvalidFeedback = "Invalid Settings",
+        ) {
+            return@FormSwitchInput it != null
+        }
+
+    val customTemplateLocation =
+        FormUploadInput(
+            label = "Custom Template File",
+            accept = listOf(".zip"),
+        ) {
+            return@FormUploadInput true
+        }
 
     val submitButton = FormButton()
 
@@ -265,17 +276,17 @@ class TenantForm : FormControl<Unit, Unit> {
     override fun getInput() {}
 
     override fun isValid(): Boolean {
-        return name.isValid()
-                && companyKey.isValid()
-                && domain.isValid()
-                && signInBtnColor.isValid()
-                && resetPasswordLink.isValid()
-                && createAccountLink.isValid()
-                && enabled.isValid()
-                && defaultRedirectUrl.isValid()
-                && enableConfigPanel.isValid()
-                && enableCustomTemplate.isValid()
-                && customTemplateLocation.isValid()
+        return name.isValid() &&
+            companyKey.isValid() &&
+            domain.isValid() &&
+            signInBtnColor.isValid() &&
+            resetPasswordLink.isValid() &&
+            createAccountLink.isValid() &&
+            enabled.isValid() &&
+            defaultRedirectUrl.isValid() &&
+            enableConfigPanel.isValid() &&
+            enableCustomTemplate.isValid() &&
+            customTemplateLocation.isValid()
     }
 
     override fun setCustomError(message: String) {}
@@ -313,7 +324,7 @@ class TenantForm : FormControl<Unit, Unit> {
 
 fun tenantFormErrorHandler(
     errors: Map<String, List<String>>?,
-    tenantForm: TenantForm
+    tenantForm: TenantForm,
 ) {
     if (errors != null) {
         if (errors["name"]?.contains("exist") == true) {

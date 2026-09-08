@@ -1,12 +1,12 @@
 package com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.user.components
 
+import com.bittokazi.kvision.spa.framework.base.common.SpaAppEngine
+import com.bittokazi.kvision.spa.framework.base.utils.sweetAlert
 import com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.role.RoleService
 import com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.user.UserService
 import com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.user.components.form.UserForm
 import com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.user.components.form.userFormComponent
 import com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.user.components.form.userFormErrorHandler
-import com.bittokazi.kvision.spa.framework.base.common.SpaAppEngine
-import com.bittokazi.kvision.spa.framework.base.utils.sweetAlert
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.APP_DASHBOARD_USER_ROUTE
 import com.bittokazi.oauth2.auth.frontend.frontend.base.models.Role
 import com.bittokazi.oauth2.auth.frontend.frontend.base.models.User

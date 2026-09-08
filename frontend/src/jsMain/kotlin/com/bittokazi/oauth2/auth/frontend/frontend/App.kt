@@ -14,7 +14,6 @@ import com.bittokazi.oauth2.auth.frontend.frontend.base.services.AuthService
 import com.bittokazi.oauth2.auth.frontend.frontend.base.services.DefaultLogoutActionProvider
 
 fun main() {
-
     importDefaultResources()
     SpaApplication.init()
     SpaAppEngine.restService.REFRESH_TOKEN_ENDPOINT = "${SpaAppEngine.restService.BASE_URL}/api/v1/oauth/refresh/token"
@@ -23,20 +22,22 @@ fun main() {
     AppEngine.authService = AuthService()
     AppEngine.tenantService = TenantService()
 
-    SpaApplication.applicationConfiguration = ApplicationConfiguration(
-        spaTenantInfo = SpaTenantInfo(
-            cpanel = false,
-            enabledConfigPanel = false,
-            name = "AuthKit"
-        ),
-        isTenantEnabled = true,
-        rootApplicationModule = rootModule(),
-        tenantInformationProvider = AppEngine.tenantService,
-        authHolderType = AuthHolderType.COOKIE,
-        menuProvider = DefaultMenuProvider(),
-        logoutActionProvider = DefaultLogoutActionProvider(),
-        refreshTokenRequestProvider = AppEngine.authService
-    )
+    SpaApplication.applicationConfiguration =
+        ApplicationConfiguration(
+            spaTenantInfo =
+                SpaTenantInfo(
+                    cpanel = false,
+                    enabledConfigPanel = false,
+                    name = "AuthKit",
+                ),
+            isTenantEnabled = true,
+            rootApplicationModule = rootModule(),
+            tenantInformationProvider = AppEngine.tenantService,
+            authHolderType = AuthHolderType.COOKIE,
+            menuProvider = DefaultMenuProvider(),
+            logoutActionProvider = DefaultLogoutActionProvider(),
+            refreshTokenRequestProvider = AppEngine.authService,
+        )
 
     SpaApplication.start()
 }

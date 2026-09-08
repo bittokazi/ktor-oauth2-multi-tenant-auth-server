@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class UserList(
     val pages: Int,
     val records: Int,
-    val users: List<User>
+    val users: List<User>,
 )

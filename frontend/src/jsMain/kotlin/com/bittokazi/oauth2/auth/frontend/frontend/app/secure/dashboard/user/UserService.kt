@@ -2,9 +2,8 @@ package com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.user
 
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.restService
 import com.bittokazi.oauth2.auth.frontend.frontend.base.models.BaseList
-import com.bittokazi.oauth2.auth.frontend.frontend.base.models.User
-import com.bittokazi.oauth2.auth.frontend.frontend.base.models.UserList
 import com.bittokazi.oauth2.auth.frontend.frontend.base.models.TwoFASecretPayload
+import com.bittokazi.oauth2.auth.frontend.frontend.base.models.User
 import com.bittokazi.oauth2.auth.frontend.frontend.base.models.UserTrustedDevice
 import io.kvision.rest.HttpMethod
 import io.kvision.rest.RestResponse
@@ -15,10 +14,13 @@ import kotlinx.serialization.json.encodeToDynamic
 import kotlin.js.Promise
 
 object UserService {
-
     private val userBaseUrl = "${restService.BASE_URL}/api/v1/users"
 
-    fun getAll(page: Int = 1, count: Int = 10, query: String = ""): Promise<RestResponse<BaseList<User>>> {
+    fun getAll(
+        page: Int = 1,
+        count: Int = 10,
+        query: String = "",
+    ): Promise<RestResponse<BaseList<User>>> {
         return restService.createAuthCall {
             restService.getClient().request<BaseList<User>>("$userBaseUrl?page=$page&count=$count&query=$query") {
                 method = HttpMethod.GET
@@ -39,7 +41,7 @@ object UserService {
         return restService.createAuthCall {
             restService.getClient().request<User>(userBaseUrl) {
                 method = HttpMethod.POST
-                data =  Json.encodeToDynamic(user)
+                data = Json.encodeToDynamic(user)
             }
         }
     }
@@ -49,7 +51,7 @@ object UserService {
         return restService.createAuthCall {
             restService.getClient().request<User>("$userBaseUrl/${user.id}") {
                 method = HttpMethod.PUT
-                data =  Json.encodeToDynamic(user)
+                data = Json.encodeToDynamic(user)
             }
         }
     }
@@ -59,7 +61,7 @@ object UserService {
         return restService.createAuthCall {
             restService.getClient().request<User>("$userBaseUrl/${user.id}/update-password") {
                 method = HttpMethod.PUT
-                data =  Json.encodeToDynamic(user)
+                data = Json.encodeToDynamic(user)
             }
         }
     }
@@ -69,7 +71,7 @@ object UserService {
         return restService.createAuthCall {
             restService.getClient().request<User>("$userBaseUrl/whoami") {
                 method = HttpMethod.PUT
-                data =  Json.encodeToDynamic(user)
+                data = Json.encodeToDynamic(user)
             }
         }
     }

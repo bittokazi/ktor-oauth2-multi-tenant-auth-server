@@ -21,9 +21,8 @@ fun Container.roleFormComponent(
     update: Boolean = false,
     roleForm: RoleForm,
     role: Role?,
-    submitCallback: () -> Unit
+    submitCallback: () -> Unit,
 ): Container {
-
     var errorDiv: Div? = null
 
     val errorMessage: ObservableValue<String> = ObservableValue("")
@@ -34,7 +33,7 @@ fun Container.roleFormComponent(
             errorMessage.setState("")
         }
 
-        if(!roleForm.isValid()) {
+        if (!roleForm.isValid()) {
             errorMessage.setState("Invalid Form")
             roleForm.enforceValidation()
         } else {
@@ -68,23 +67,24 @@ fun Container.roleFormComponent(
                         when (update) {
                             true -> "Update"
                             false -> "Add"
-                        }
-                    )
+                        },
+                    ),
                 )
             }
             div(className = "col-md-9")
             div(className = "col-md-3") {
                 window.setTimeout({
-                    if(errorDiv == null) {
-                        errorDiv = Div(className = "alert alert-danger align-items-center") {
-                            marginTop = 10 to UNIT.px
-                            setAttribute("role", "alert")
-                            div {
-                                errorMessage.subscribe {
-                                    content = it
+                    if (errorDiv == null) {
+                        errorDiv =
+                            Div(className = "alert alert-danger align-items-center") {
+                                marginTop = 10 to UNIT.px
+                                setAttribute("role", "alert")
+                                div {
+                                    errorMessage.subscribe {
+                                        content = it
+                                    }
                                 }
                             }
-                        }
                         add(errorDiv!!)
                         errorDiv?.getElementJQuery()?.hide(0)
                     }
@@ -98,28 +98,30 @@ fun Container.roleFormComponent(
 }
 
 class RoleForm : FormControl<Unit, Unit> {
-
-    val name = FormTextInput(
-        label = "Title",
-        placeholder = "Enter role title",
-        defaultInvalidFeedback = "Title missing"
-    ) {
-        return@FormTextInput !(it == null || it.isEmpty())
-    }
-
-    val roleKey = FormTextInput(
-        label = "Name",
-        placeholder = "ROLE_*",
-        defaultInvalidFeedback = "Please provide a role name consist with all upper case letters and underscore"
-    ) {
-        if(it == null) {
-            return@FormTextInput false
+    val name =
+        FormTextInput(
+            label = "Title",
+            placeholder = "Enter role title",
+            defaultInvalidFeedback = "Title missing",
+        ) {
+            return@FormTextInput !(it == null || it.isEmpty())
         }
-        val regex = "^ROLE_[A-Z_]+$".toRegex()
-        return@FormTextInput regex.matches(it)
-    }
+
+    val roleKey =
+        FormTextInput(
+            label = "Name",
+            placeholder = "ROLE_*",
+            defaultInvalidFeedback = "Please provide a role name consist with all upper case letters and underscore",
+        ) {
+            if (it == null) {
+                return@FormTextInput false
+            }
+            val regex = "^ROLE_[A-Z_]+$".toRegex()
+            return@FormTextInput regex.matches(it)
+        }
 
     val submitButton = FormButton()
+
     override fun setInput(input: Unit) {
         TODO("Not yet implemented")
     }
@@ -129,8 +131,8 @@ class RoleForm : FormControl<Unit, Unit> {
     }
 
     override fun isValid(): Boolean {
-        return name.isValid()
-                && roleKey.isValid()
+        return name.isValid() &&
+            roleKey.isValid()
     }
 
     override fun setCustomError(message: String) {
@@ -149,7 +151,7 @@ class RoleForm : FormControl<Unit, Unit> {
 
 fun roleFormErrorHandler(
     errors: Map<String, List<String>>?,
-    roleForm: RoleForm
+    roleForm: RoleForm,
 ) {
     if (errors != null) {
         if (errors["roleKey"]?.contains("exist") == true) {

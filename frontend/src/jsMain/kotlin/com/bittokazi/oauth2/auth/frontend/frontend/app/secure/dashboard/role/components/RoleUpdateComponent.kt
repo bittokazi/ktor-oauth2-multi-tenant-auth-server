@@ -17,9 +17,8 @@ import kotlinx.serialization.json.encodeToDynamic
 
 @OptIn(ExperimentalSerializationApi::class)
 class RoleUpdateComponent(
-    id: String
-): SimplePanel() {
-
+    id: String,
+) : SimplePanel() {
     val roleForm = RoleForm()
 
     init {
@@ -28,7 +27,7 @@ class RoleUpdateComponent(
                 roleFormComponent(
                     update = true,
                     roleForm = roleForm,
-                    role = role.data
+                    role = role.data,
                 ) {
                     if (roleForm.isValid()) {
                         roleForm.submitButton.showLoading()
@@ -37,16 +36,16 @@ class RoleUpdateComponent(
                                 id = id,
                                 roleKey = roleForm.roleKey.input.value.orEmpty(),
                                 name = roleForm.name.input.value.orEmpty(),
-                            )
+                            ),
                         ).then {
                             sweetAlert.fire(
                                 Json.encodeToDynamic(
                                     mapOf(
                                         "title" to "Success",
                                         "text" to "Updated Role Successfully.",
-                                        "icon" to "success"
-                                    )
-                                )
+                                        "icon" to "success",
+                                    ),
+                                ),
                             )
                             SpaAppEngine.routing.navigate(APP_DASHBOARD_ROLE_ROUTE)
                         }.catch { throwable ->

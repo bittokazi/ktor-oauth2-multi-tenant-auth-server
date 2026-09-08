@@ -28,14 +28,18 @@ fun Container.customDashboardFooter() {
             div(className = "row text-muted") {
                 div(className = "col-6 text-start") {
                     link("", SpaAppEngine.APP_DASHBOARD_ROUTE, dataNavigo = true) {
-                        add(strong {
-                            content = SpaTenantService.tenantInfo.name
-                        })
+                        add(
+                            strong {
+                                content = SpaTenantService.tenantInfo.name
+                            },
+                        )
                     }
-                    add(span {
-                        content = "&nbsp; &copy;"
-                        rich = true
-                    })
+                    add(
+                        span {
+                            content = "&nbsp; &copy;"
+                            rich = true
+                        },
+                    )
                 }
                 div(className = "col-6 text-end") {
                     ul(className = "list-inline") {
@@ -45,7 +49,7 @@ fun Container.customDashboardFooter() {
                         li(className = "list-inline-item") {
                             span(
                                 " |",
-                                className = "text-muted"
+                                className = "text-muted",
                             )
                         }
                         li(className = "list-inline-item") {
@@ -54,7 +58,7 @@ fun Container.customDashboardFooter() {
                                     if (it != null) {
                                         span(
                                             "Change Log",
-                                            className = "cursor-pointer"
+                                            className = "cursor-pointer",
                                         ).onClick {
                                             val changeLogs = AppEngine.tenantService.changeLogs.ifEmpty { listOf("No changelog available") }
                                             sweetAlert.fire(
@@ -64,9 +68,9 @@ fun Container.customDashboardFooter() {
                                                         "html" to Utils.formatChangeLogHtml(changeLogs),
                                                         "icon" to "info",
                                                         "confirmButtonText" to "Close",
-                                                        "width" to "600px"
-                                                    )
-                                                )
+                                                        "width" to "600px",
+                                                    ),
+                                                ),
                                             )
                                         }
                                     }

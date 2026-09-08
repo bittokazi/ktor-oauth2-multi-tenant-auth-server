@@ -1,6 +1,5 @@
 package com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.client.components.form
 
-import com.bittokazi.oauth2.auth.frontend.frontend.base.models.Client
 import com.bittokazi.kvision.spa.framework.base.components.form.FormButton
 import com.bittokazi.kvision.spa.framework.base.components.form.FormControl
 import com.bittokazi.kvision.spa.framework.base.components.form.FormSelectInput
@@ -10,6 +9,7 @@ import com.bittokazi.kvision.spa.framework.base.components.form.buttonComponent
 import com.bittokazi.kvision.spa.framework.base.components.form.selectInputComponent
 import com.bittokazi.kvision.spa.framework.base.components.form.switchInputComponent
 import com.bittokazi.kvision.spa.framework.base.components.form.textInputComponent
+import com.bittokazi.oauth2.auth.frontend.frontend.base.models.Client
 import io.kvision.core.Container
 import io.kvision.core.UNIT
 import io.kvision.core.getElementJQuery
@@ -25,9 +25,8 @@ fun Container.clientFormComponent(
     update: Boolean = false,
     clientForm: ClientForm,
     client: Client?,
-    submitCallback: () -> Unit // Client form doesn't seem to handle file uploads
+    submitCallback: () -> Unit,
 ): Container {
-
     var errorDiv: Div? = null
 
     val errorMessage: ObservableValue<String> = ObservableValue("")
@@ -64,8 +63,8 @@ fun Container.clientFormComponent(
                     textInputComponent(
                         clientForm.clientId,
                         client?.clientId ?: "",
-                        disabledInput = !update
-                    )
+                        disabledInput = !update,
+                    ),
                 )
             }
             div(className = "col-md-6") {
@@ -78,16 +77,16 @@ fun Container.clientFormComponent(
                 add(
                     textInputComponent(
                         clientForm.authorizedGrantTypes,
-                        client?.grantTypes?.joinToString(",") ?: ""
-                    )
+                        client?.grantTypes?.joinToString(",") ?: "",
+                    ),
                 )
             }
             div(className = "col-md-6") {
                 add(
                     textInputComponent(
                         clientForm.webServerRedirectUri,
-                        client?.redirectUris?.joinToString(",") ?: ""
-                    )
+                        client?.redirectUris?.joinToString(",") ?: "",
+                    ),
                 )
             }
             div(className = "col-md-6") {
@@ -97,8 +96,8 @@ fun Container.clientFormComponent(
                 add(
                     textInputComponent(
                         clientForm.refreshTokenValidity,
-                        client?.refreshTokenValidity?.toString() ?: ""
-                    )
+                        client?.refreshTokenValidity?.toString() ?: "",
+                    ),
                 )
             }
             div(className = "col-md-6") {
@@ -106,16 +105,16 @@ fun Container.clientFormComponent(
                     selectInputComponent(
                         clientForm.clientType,
                         listOf("" to "Please Select", "confidential" to "confidential", "public" to "public"),
-                        client?.clientType ?: ""
-                    )
+                        client?.clientType ?: "",
+                    ),
                 )
             }
             div(className = "col-md-6") {
                 add(
                     textInputComponent(
                         clientForm.postLogoutRedirectUri,
-                        client?.postLogoutRedirectUri ?: ""
-                    )
+                        client?.postLogoutRedirectUri ?: "",
+                    ),
                 )
             }
             div(className = "col-md-6") {}
@@ -128,8 +127,8 @@ fun Container.clientFormComponent(
                     switchInputComponent(
                         clientForm.generateSecret,
                         !update,
-                        disabledInput = !update
-                    )
+                        disabledInput = !update,
+                    ),
                 )
             }
             div(className = "col-md-10")
@@ -140,23 +139,24 @@ fun Container.clientFormComponent(
                         when (update) {
                             true -> "Update"
                             false -> "Add"
-                        }
-                    )
+                        },
+                    ),
                 )
             }
             div(className = "col-md-9")
             div(className = "col-md-3") {
                 window.setTimeout({
                     if (errorDiv == null) {
-                        errorDiv = Div(className = "alert alert-danger align-items-center") {
-                            marginTop = 10 to UNIT.px
-                            setAttribute("role", "alert")
-                            div {
-                                errorMessage.subscribe {
-                                    content = it
+                        errorDiv =
+                            Div(className = "alert alert-danger align-items-center") {
+                                marginTop = 10 to UNIT.px
+                                setAttribute("role", "alert")
+                                div {
+                                    errorMessage.subscribe {
+                                        content = it
+                                    }
                                 }
                             }
-                        }
                         add(errorDiv!!)
                         errorDiv?.getElementJQuery()?.hide(0)
                     }
@@ -173,110 +173,120 @@ fun Container.clientFormComponent(
 }
 
 class ClientForm(update: Boolean) : FormControl<Unit, Unit> {
-
-    val clientId = FormTextInput(
-        label = "Client ID",
-        placeholder = when (update) {
-            true -> "Please enter unique client ID"
-            false -> "Will be auto generated"
-        },
-        defaultInvalidFeedback = "Missing input"
-    ) {
-        return@FormTextInput true
-    }
-
-    val clientName = FormTextInput(
-        label="Client Name",
-        placeholder = "Enter client name",
-        defaultInvalidFeedback = "a to z and _ is allowed",
-
-    ) {
-        if(it == null) {
-            return@FormTextInput false
+    val clientId =
+        FormTextInput(
+            label = "Client ID",
+            placeholder =
+                when (update) {
+                    true -> "Please enter unique client ID"
+                    false -> "Will be auto generated"
+                },
+            defaultInvalidFeedback = "Missing input",
+        ) {
+            return@FormTextInput true
         }
 
-        val regex = "^[a-z_ A-Z0-9]+$".toRegex()
-        return@FormTextInput regex.matches(it)
-    }
+    val clientName =
+        FormTextInput(
+            label = "Client Name",
+            placeholder = "Enter client name",
+            defaultInvalidFeedback = "a to z and _ is allowed",
+        ) {
+            if (it == null) {
+                return@FormTextInput false
+            }
 
-    val scope = FormTextInput(
-        label = "Scopes",
-        placeholder = "Enter scopes comma(,) separated",
-        defaultInvalidFeedback = "Missing input"
-    ) {
-        return@FormTextInput it != null
-    }
-
-    val authorizedGrantTypes = FormTextInput(
-        label = "Authorized Grant Types",
-        placeholder = "Enter grant types comma(,) separated",
-        defaultInvalidFeedback = "Missing input"
-    ) {
-        return@FormTextInput it != null
-    }
-
-    val webServerRedirectUri = FormTextInput(
-        label = "Redirect URL",
-        placeholder = "...",
-        defaultInvalidFeedback = "Missing input"
-    ) {
-        return@FormTextInput true
-    }
-
-    val accessTokenValidity = FormTextInput(
-        label = "Access Token Validity",
-        placeholder = "In seconds",
-        defaultInvalidFeedback = "Only number is allowed"
-    ) {
-        if(it == null) {
-            return@FormTextInput false
+            val regex = "^[a-z_ A-Z0-9]+$".toRegex()
+            return@FormTextInput regex.matches(it)
         }
 
-        val regex = "^[0-9]+$".toRegex()
-        return@FormTextInput regex.matches(it)
-    }
-
-    val refreshTokenValidity = FormTextInput(
-        label = "Refresh Token Validity",
-        placeholder = "In seconds",
-        defaultInvalidFeedback = "Only number is allowed"
-    ) {
-        if(it == null) {
-            return@FormTextInput false
+    val scope =
+        FormTextInput(
+            label = "Scopes",
+            placeholder = "Enter scopes comma(,) separated",
+            defaultInvalidFeedback = "Missing input",
+        ) {
+            return@FormTextInput it != null
         }
 
-        val regex = "^[0-9]+$".toRegex()
-        return@FormTextInput regex.matches(it)
-    }
+    val authorizedGrantTypes =
+        FormTextInput(
+            label = "Authorized Grant Types",
+            placeholder = "Enter grant types comma(,) separated",
+            defaultInvalidFeedback = "Missing input",
+        ) {
+            return@FormTextInput it != null
+        }
 
-    val requireConsent = FormSwitchInput(
-        label = "Require User Consent",
-        defaultInvalidFeedback = "Invalid Settings"
-    ) {
-        return@FormSwitchInput it != null
-    }
+    val webServerRedirectUri =
+        FormTextInput(
+            label = "Redirect URL",
+            placeholder = "...",
+            defaultInvalidFeedback = "Missing input",
+        ) {
+            return@FormTextInput true
+        }
 
-    val generateSecret = FormSwitchInput(
-        label = "Generate Secret",
-        defaultInvalidFeedback = "Invalid Settings"
-    ) {
-        return@FormSwitchInput it != null
-    }
+    val accessTokenValidity =
+        FormTextInput(
+            label = "Access Token Validity",
+            placeholder = "In seconds",
+            defaultInvalidFeedback = "Only number is allowed",
+        ) {
+            if (it == null) {
+                return@FormTextInput false
+            }
 
-    val clientType = FormSelectInput(
-        label = "Client Type",
-        defaultInvalidFeedback = "Select a client type"
-    ) {
-        it != 0
-    }
+            val regex = "^[0-9]+$".toRegex()
+            return@FormTextInput regex.matches(it)
+        }
 
-    val postLogoutRedirectUri = FormTextInput(
-        label = "Post Logout Redirect URL",
-        placeholder = "Keep it blank to use default",
-        defaultInvalidFeedback = "Missing input"
-    ) {
-        return@FormTextInput true
-    }
+    val refreshTokenValidity =
+        FormTextInput(
+            label = "Refresh Token Validity",
+            placeholder = "In seconds",
+            defaultInvalidFeedback = "Only number is allowed",
+        ) {
+            if (it == null) {
+                return@FormTextInput false
+            }
+
+            val regex = "^[0-9]+$".toRegex()
+            return@FormTextInput regex.matches(it)
+        }
+
+    val requireConsent =
+        FormSwitchInput(
+            label = "Require User Consent",
+            defaultInvalidFeedback = "Invalid Settings",
+        ) {
+            return@FormSwitchInput it != null
+        }
+
+    val generateSecret =
+        FormSwitchInput(
+            label = "Generate Secret",
+            defaultInvalidFeedback = "Invalid Settings",
+        ) {
+            return@FormSwitchInput it != null
+        }
+
+    val clientType =
+        FormSelectInput(
+            label = "Client Type",
+            defaultInvalidFeedback = "Select a client type",
+        ) {
+            it != 0
+        }
+
+    val postLogoutRedirectUri =
+        FormTextInput(
+            label = "Post Logout Redirect URL",
+            placeholder = "Keep it blank to use default",
+            defaultInvalidFeedback = "Missing input",
+        ) {
+            return@FormTextInput true
+        }
 
     val submitButton = FormButton()
 
@@ -285,17 +295,17 @@ class ClientForm(update: Boolean) : FormControl<Unit, Unit> {
     override fun getInput() {}
 
     override fun isValid(): Boolean {
-        return clientId.isValid()
-                && clientName.isValid()
-                && scope.isValid()
-                && authorizedGrantTypes.isValid()
-                && webServerRedirectUri.isValid()
-                && accessTokenValidity.isValid()
-                && refreshTokenValidity.isValid()
-                && requireConsent.isValid()
-                && generateSecret.isValid()
-                && clientType.isValid()
-                && postLogoutRedirectUri.isValid()
+        return clientId.isValid() &&
+            clientName.isValid() &&
+            scope.isValid() &&
+            authorizedGrantTypes.isValid() &&
+            webServerRedirectUri.isValid() &&
+            accessTokenValidity.isValid() &&
+            refreshTokenValidity.isValid() &&
+            requireConsent.isValid() &&
+            generateSecret.isValid() &&
+            clientType.isValid() &&
+            postLogoutRedirectUri.isValid()
     }
 
     override fun setCustomError(message: String) {}
@@ -333,7 +343,7 @@ class ClientForm(update: Boolean) : FormControl<Unit, Unit> {
 
 fun clientFormErrorHandler(
     errors: Map<String, List<String>>?,
-    clientForm: ClientForm
+    clientForm: ClientForm,
 ) {
     clientForm.submitButton.resetInput()
 }

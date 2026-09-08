@@ -12,21 +12,23 @@ import com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.user.use
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine
 import com.bittokazi.oauth2.auth.frontend.frontend.base.layout.CustomDashboardLayoutLoader
 
-fun dashboardModule() = DefaultSecuredModule(
-    layoutLoader = CustomDashboardLayoutLoader(),
-    modules = listOf(
-        clientModule(),
-        userModule(),
-        roleModule(),
-        tenantModule(),
-        accountModule()
-    ),
-    RouterConfiguration(
-        route = AppEngine.APP_DASHBOARD_ROUTE,
-        title = "Dashboard Home",
-        view = {
-            DashboardHomePage()
-        },
-        dashboardContainer = ContentContainerType.NO_CARD
+fun dashboardModule() =
+    DefaultSecuredModule(
+        layoutLoader = CustomDashboardLayoutLoader(),
+        modules =
+            listOf(
+                clientModule(),
+                userModule(),
+                roleModule(),
+                tenantModule(),
+                accountModule(),
+            ),
+        RouterConfiguration(
+            route = AppEngine.APP_DASHBOARD_ROUTE,
+            title = "Dashboard Home",
+            view = {
+                DashboardHomePage()
+            },
+            dashboardContainer = ContentContainerType.NO_CARD,
+        ),
     )
-)

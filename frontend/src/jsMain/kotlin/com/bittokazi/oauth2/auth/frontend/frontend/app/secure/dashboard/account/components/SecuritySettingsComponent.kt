@@ -18,8 +18,8 @@ import com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.user.com
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.APP_DASHBOARD_ACCOUNT_SECURITY_ROUTE
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.APP_DASHBOARD_ACCOUNT_SETTINGS_ROUTE
-import com.bittokazi.oauth2.auth.frontend.frontend.base.models.User
 import com.bittokazi.oauth2.auth.frontend.frontend.base.models.TwoFASecretPayload
+import com.bittokazi.oauth2.auth.frontend.frontend.base.models.User
 import io.kvision.core.Col
 import io.kvision.core.Color
 import io.kvision.core.Cursor
@@ -50,34 +50,36 @@ import kotlinx.serialization.json.encodeToDynamic
 import org.w3c.dom.get
 
 @OptIn(ExperimentalSerializationApi::class)
-class SecuritySettingsComponent: SimplePanel() {
+class SecuritySettingsComponent : SimplePanel() {
     val userPasswordUpdateForm = UserPasswordUpdateForm(self = true)
     lateinit var user: User
     lateinit var twoFASecretPayload: TwoFASecretPayload
     val pageRefreshListner = ObservableValue<Boolean>(false)
     val twoFaModalChangeListner = ObservableValue<Boolean>(false)
     val deleteObserver = ObservableValue<Boolean?>(null)
-    val twoFaCodeInput = FormTextInput(
-        "", "Enter the code shown in 2FA App",
-        defaultInvalidFeedback = "Only numbers allowed"
-    ) {
-        if (it == null) {
-            return@FormTextInput false
-        }
+    val twoFaCodeInput =
+        FormTextInput(
+            "",
+            "Enter the code shown in 2FA App",
+            defaultInvalidFeedback = "Only numbers allowed",
+        ) {
+            if (it == null) {
+                return@FormTextInput false
+            }
 
-        val regex = "^[0-9]+$".toRegex()
-        return@FormTextInput regex.matches(it)
-    }
+            val regex = "^[0-9]+$".toRegex()
+            return@FormTextInput regex.matches(it)
+        }
     val twoFaCodeInputButton = FormButton()
 
-    fun sendTwoFaEnableRequest(code: String = "")  {
+    fun sendTwoFaEnableRequest(code: String = "") {
         if (!twoFaCodeInput.isValid()) {
-           twoFaCodeInput.enforceValidation()
+            twoFaCodeInput.enforceValidation()
             return
         }
         twoFASecretPayload.code = code.toInt()
         UserService.enableTwoFa(
-            twoFASecretPayload
+            twoFASecretPayload,
         ).then {
             when (it.data.twoFaEnabled) {
                 true -> {
@@ -91,18 +93,18 @@ class SecuritySettingsComponent: SimplePanel() {
                                 "confirmButtonText" to "Dismiss",
                                 "allowOutsideClick" to null,
                                 "html" to "<p style=\"text-align: justify\">" +
-                                        "<span style=\"font-weight: bold;\">Please keep the backup codes in safe place" +
-                                        "</span><br /><br/>" +
-                                        twoFASecretPayload.scratchCodes?.mapIndexed { i, s -> "${i+1}. $s" }
-                                            ?.joinToString("<br />") +
-                                        "</p>"
-                            )
-                        )
+                                    "<span style=\"font-weight: bold;\">Please keep the backup codes in safe place" +
+                                    "</span><br /><br/>" +
+                                    twoFASecretPayload.scratchCodes?.mapIndexed { i, s -> "${i + 1}. $s" }
+                                        ?.joinToString("<br />") +
+                                    "</p>",
+                            ),
+                        ),
                     )
                     twoFaModalChangeListner.setState(false)
                     window.setTimeout({
                         pageRefreshListner.setState(true)
-                    },100)
+                    }, 100)
                 }
                 else -> {
                     twoFaCodeInput.setCustomError("Invalid code")
@@ -120,9 +122,9 @@ class SecuritySettingsComponent: SimplePanel() {
                             mapOf(
                                 "title" to "Success",
                                 "text" to "Disabled 2FA Successfully.",
-                                "icon" to "success"
-                            )
-                        )
+                                "icon" to "success",
+                            ),
+                        ),
                     )
                     pageRefreshListner.setState(true)
                 }
@@ -149,12 +151,12 @@ class SecuritySettingsComponent: SimplePanel() {
                         "confirmButtonText" to "Dismiss",
                         "allowOutsideClick" to null,
                         "html" to "<p style=\"text-align: justify\">" +
-                                "<span style=\"font-weight: bold;\">Please keep the backup codes in safe place" +
-                                "</span><br /><br />" +
-                                it.data.mapIndexed { i, s -> "${i+1}. $s" }.joinToString("<br />") +
-                                "</p>"
-                    )
-                )
+                            "<span style=\"font-weight: bold;\">Please keep the backup codes in safe place" +
+                            "</span><br /><br />" +
+                            it.data.mapIndexed { i, s -> "${i + 1}. $s" }.joinToString("<br />") +
+                            "</p>",
+                    ),
+                ),
             )
             onFinish()
         }.catch {
@@ -169,9 +171,9 @@ class SecuritySettingsComponent: SimplePanel() {
                     mapOf(
                         "title" to "Success",
                         "text" to "Removed device with ID [$id]",
-                        "icon" to "success"
-                    )
-                )
+                        "icon" to "success",
+                    ),
+                ),
             )
             deleteObserver.setState(true)
         }.catch {
@@ -180,9 +182,9 @@ class SecuritySettingsComponent: SimplePanel() {
                     mapOf(
                         "title" to "Error",
                         "text" to "Unable to delete",
-                        "icon" to "error"
-                    )
-                )
+                        "icon" to "error",
+                    ),
+                ),
             )
             deleteObserver.setState(true)
         }
@@ -214,7 +216,7 @@ class SecuritySettingsComponent: SimplePanel() {
                 fun tableBody(): Tbody {
                     return tbody {
                         UserService.getTrustedDevices().then { response ->
-                            response.data.forEachIndexed {  index, device ->
+                            response.data.forEachIndexed { index, device ->
                                 tr {
                                     td {
                                         content = device.id.toString()
@@ -230,9 +232,10 @@ class SecuritySettingsComponent: SimplePanel() {
                                     }
                                     td {
                                         span {
-                                            color = Color.name(
-                                                Col.RED
-                                            )
+                                            color =
+                                                Color.name(
+                                                    Col.RED,
+                                                )
                                             cursor = Cursor.POINTER
                                             onClick {
                                                 delete(device.id!!)
@@ -241,7 +244,7 @@ class SecuritySettingsComponent: SimplePanel() {
                                             span(className = "feather-sm me-1") {
                                                 setAttribute("data-feather", "trash")
                                             }
-                                            + "Delete"
+                                            +"Delete"
                                         }
                                     }
                                 }
@@ -258,7 +261,7 @@ class SecuritySettingsComponent: SimplePanel() {
                 add(tableBody())
 
                 deleteObserver.subscribe {
-                    if(it !=null && it) {
+                    if (it != null && it) {
                         removeAt(1)
                         add(tableBody())
                         window.setTimeout({
@@ -278,7 +281,7 @@ class SecuritySettingsComponent: SimplePanel() {
                         label = "",
                         url = APP_DASHBOARD_ACCOUNT_SETTINGS_ROUTE,
                         className = "nav-link",
-                        dataNavigo = true
+                        dataNavigo = true,
                     ) {
                         span(className = "feather-sm me-1") {
                             setAttribute("data-feather", "user")
@@ -289,7 +292,7 @@ class SecuritySettingsComponent: SimplePanel() {
                         label = "",
                         url = APP_DASHBOARD_ACCOUNT_SECURITY_ROUTE,
                         className = "nav-link active",
-                        dataNavigo = true
+                        dataNavigo = true,
                     ) {
                         span(className = "feather-sm me-1") {
                             setAttribute("data-feather", "lock")
@@ -309,7 +312,7 @@ class SecuritySettingsComponent: SimplePanel() {
                                 user = userResponse.data
                                 userPasswordFormComponent(
                                     self = true,
-                                    userPasswordUpdateForm = userPasswordUpdateForm
+                                    userPasswordUpdateForm = userPasswordUpdateForm,
                                 ) {
                                     when (userPasswordUpdateForm.isValid()) {
                                         true -> {
@@ -318,16 +321,16 @@ class SecuritySettingsComponent: SimplePanel() {
                                                     id = user.id,
                                                     password = userPasswordUpdateForm.currentPassword.getValue(),
                                                     newPassword = userPasswordUpdateForm.newPassword.getValue(),
-                                                )
+                                                ),
                                             ).then {
                                                 sweetAlert.fire(
                                                     Json.encodeToDynamic(
                                                         mapOf(
                                                             "title" to "Success",
                                                             "text" to "Updated Password Successfully.",
-                                                            "icon" to "success"
-                                                        )
-                                                    )
+                                                            "icon" to "success",
+                                                        ),
+                                                    ),
                                                 )
                                                 pageRefreshListner.setState(true)
                                             }.catch { throwable ->
@@ -336,8 +339,10 @@ class SecuritySettingsComponent: SimplePanel() {
                                                         throwable.response?.text()?.then {
                                                             val response: Map<String, List<String>> =
                                                                 Json.decodeFromString(it)
-                                                            return@then userPasswordFormErrorHandler(response,
-                                                                userPasswordUpdateForm)
+                                                            return@then userPasswordFormErrorHandler(
+                                                                response,
+                                                                userPasswordUpdateForm,
+                                                            )
                                                         }
                                                     }
                                                 }
@@ -345,7 +350,6 @@ class SecuritySettingsComponent: SimplePanel() {
                                             }
                                         }
                                         false -> {
-
                                         }
                                     }
                                 }
@@ -404,10 +408,11 @@ class SecuritySettingsComponent: SimplePanel() {
                                                                     BootstrapModalService.open {
                                                                         js("new bootstrap.Modal('#twoFa')")
                                                                     }
-                                                                    document.getElementById("qrcode")!!.innerHTML = QrCodeService.create(
-                                                                        "otpauth://totp/${window.location.host}" +
-                                                                                ":${user.email}?secret=${twoFASecretPayload.secret}"
-                                                                    )
+                                                                    document.getElementById("qrcode")!!.innerHTML =
+                                                                        QrCodeService.create(
+                                                                            "otpauth://totp/${window.location.host}" +
+                                                                                ":${user.email}?secret=${twoFASecretPayload.secret}",
+                                                                        )
                                                                 }, 300)
                                                                 window.setTimeout({
                                                                     disabled = false
@@ -420,9 +425,9 @@ class SecuritySettingsComponent: SimplePanel() {
                                                                                 mapOf(
                                                                                     "title" to "Error",
                                                                                     "text" to "Access Denied [403]",
-                                                                                    "icon" to "error"
-                                                                                )
-                                                                            )
+                                                                                    "icon" to "error",
+                                                                                ),
+                                                                            ),
                                                                         )
                                                                     }
                                                                 }
@@ -473,9 +478,9 @@ class SecuritySettingsComponent: SimplePanel() {
                                         mapOf(
                                             "title" to "Error",
                                             "text" to "Error while fetching user",
-                                            "icon" to "error"
-                                        )
-                                    )
+                                            "icon" to "error",
+                                        ),
+                                    ),
                                 )
                             }
                         }
@@ -488,7 +493,7 @@ class SecuritySettingsComponent: SimplePanel() {
                         window.document.getElementById("twoFaCloseBtn")?.asDynamic()?.click()
                         window.setTimeout({
                             removeAll()
-                            if(it) {
+                            if (it) {
                                 bootstrapModalComponent(
                                     modalId = "twoFa",
                                     title = "2FA Setup",
@@ -499,7 +504,7 @@ class SecuritySettingsComponent: SimplePanel() {
                                             }
                                             div(className = "col-md-8") {
                                                 textInputComponent(
-                                                    twoFaCodeInput
+                                                    twoFaCodeInput,
                                                 )
                                                 twoFaCodeInputButton.callback = {
                                                     sendTwoFaEnableRequest(twoFaCodeInput.getValue())
@@ -507,9 +512,8 @@ class SecuritySettingsComponent: SimplePanel() {
                                                 buttonComponent(twoFaCodeInputButton, "Submit")
                                             }
                                         }
-                                    }
+                                    },
                                 ) {
-
                                 }
                             }
                         }, 100)
@@ -523,7 +527,7 @@ class SecuritySettingsComponent: SimplePanel() {
         div {
             ObservableManager.setSubscriber("securitySettingsPage") {
                 pageRefreshListner.subscribe {
-                    if(it) {
+                    if (it) {
                         removeAll()
                         add(contentBody())
                         SpaAppEngine.routing.updatePageLinks()
