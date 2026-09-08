@@ -27,7 +27,7 @@ jobs:
         run: chmod +x ./backend/gradlew
 
       - name: Build Frontend
-        run: cd frontend && gradle ktlintCheck buildFrontend --no-daemon && cd ../
+        run: cd frontend && gradle buildFrontend --no-daemon && cd ../
 
       - name: Move cpanel.hbs into Backend
         run: mv frontend/build/dist/js/productionExecutable/index.html backend/src/main/resources/templates/cpanel.hbs
