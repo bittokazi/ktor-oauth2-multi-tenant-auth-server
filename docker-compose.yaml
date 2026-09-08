@@ -1,0 +1,9 @@
+services:
+  app:
+    image: bittokazi/ktor-oauth2-multi-tenant-auth-server:v1.0.0.alpha18
+    ports:
+      - "0.0.0.0:5035:5035"
+    volumes:
+      - /home/bitto/Documents/kotlin/templates/data:/app/data
+      - ./application-backend.yaml:/app/application-backend.yaml
+      - ./application-gateway.yaml:/app/application-gateway.yaml

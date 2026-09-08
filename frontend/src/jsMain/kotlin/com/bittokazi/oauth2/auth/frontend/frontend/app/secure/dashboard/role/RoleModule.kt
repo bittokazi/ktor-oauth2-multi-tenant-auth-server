@@ -9,26 +9,27 @@ import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.APP_DAS
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.APP_DASHBOARD_ROLE_ROUTE
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.APP_DASHBOARD_ROLE_UPDATE_ROUTE
 
-fun roleModule() = DefaultSecuredPageModule(
-    RouterConfiguration(
-        route = APP_DASHBOARD_ROLE_ROUTE,
-        title = "All Roles",
-        view = {
-            RoleListComponent()
-        }
-    ),
-    RouterConfiguration(
-        route = APP_DASHBOARD_ROLE_ADD_ROUTE,
-        title = "Add Role",
-        view = {
-            RoleAddComponent()
-        }
-    ),
-    RouterConfiguration(
-        route = APP_DASHBOARD_ROLE_UPDATE_ROUTE(":id"),
-        title = "Update Role",
-        view = {
-            RoleUpdateComponent(it.data.id)
-        }
+fun roleModule() =
+    DefaultSecuredPageModule(
+        RouterConfiguration(
+            route = APP_DASHBOARD_ROLE_ROUTE,
+            title = "All Roles",
+            view = {
+                RoleListComponent()
+            },
+        ),
+        RouterConfiguration(
+            route = APP_DASHBOARD_ROLE_ADD_ROUTE,
+            title = "Add Role",
+            view = {
+                RoleAddComponent()
+            },
+        ),
+        RouterConfiguration(
+            route = APP_DASHBOARD_ROLE_UPDATE_ROUTE(":id"),
+            title = "Update Role",
+            view = {
+                RoleUpdateComponent(it.data.id)
+            },
+        ),
     )
-)

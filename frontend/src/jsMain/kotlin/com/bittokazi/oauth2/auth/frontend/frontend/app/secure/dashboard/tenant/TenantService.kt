@@ -2,9 +2,9 @@ package com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.tenant
 
 import com.bittokazi.kvision.spa.framework.base.common.tenant.TenantInformationProvider
 import com.bittokazi.kvision.spa.framework.base.models.SpaTenantInfo
+import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.restService
 import com.bittokazi.oauth2.auth.frontend.frontend.base.models.Tenant
 import com.bittokazi.oauth2.auth.frontend.frontend.base.models.TenantInfo
-import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.restService
 import io.kvision.rest.HttpMethod
 import io.kvision.rest.RestResponse
 import io.kvision.rest.request
@@ -13,8 +13,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToDynamic
 import kotlin.js.Promise
 
-class TenantService: TenantInformationProvider {
-
+class TenantService : TenantInformationProvider {
     val roleBaseUrl = "${restService.BASE_URL}/api/v1/tenants"
     var changeLogs: List<String> = mutableListOf()
 
@@ -69,8 +68,8 @@ class TenantService: TenantInformationProvider {
                         cpanel = it.data.cpanel,
                         enabledConfigPanel = it.data.enabledConfigPanel,
                         name = it.data.name,
-                        systemVersion = it.data.systemVersion
-                    )
+                        systemVersion = it.data.systemVersion,
+                    ),
                 )
             }.catch { throwable ->
                 console.log(throwable)

@@ -20,8 +20,7 @@ import io.kvision.panel.SimplePanel
 import kotlinx.browser.window
 import org.w3c.dom.get
 
-class TenantListComponent: SimplePanel() {
-
+class TenantListComponent : SimplePanel() {
     init {
         div(className = "table-responsive") {
             table(className = "table table-hover my-0") {
@@ -70,9 +69,9 @@ class TenantListComponent: SimplePanel() {
                                     link(
                                         "",
                                         AppEngine.APP_DASHBOARD_TENANT_UPDATE_ROUTE(
-                                            company.id!!
+                                            company.id!!,
                                         ),
-                                        dataNavigo = true
+                                        dataNavigo = true,
                                     ) {
                                         span(className = "feather-sm me-1") {
                                             setAttribute("data-feather", "edit")
@@ -83,9 +82,10 @@ class TenantListComponent: SimplePanel() {
                                         content = " | "
                                     }
                                     span {
-                                        color = Color.name(
-                                            Col.BLUE
-                                        )
+                                        color =
+                                            Color.name(
+                                                Col.BLUE,
+                                            )
                                         cursor = Cursor.POINTER
                                         onClick {
                                             SpaAppEngine.spaAuthService.switchTenant(company.companyKey)

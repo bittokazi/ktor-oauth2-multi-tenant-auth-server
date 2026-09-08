@@ -9,7 +9,15 @@ import com.bittokazi.oauth2.auth.frontend.frontend.base.utils.Utils
 import io.kvision.core.getElementJQuery
 import io.kvision.core.onClick
 import io.kvision.form.form
-import io.kvision.html.*
+import io.kvision.html.ButtonType
+import io.kvision.html.Div
+import io.kvision.html.button
+import io.kvision.html.div
+import io.kvision.html.h1
+import io.kvision.html.link
+import io.kvision.html.main
+import io.kvision.html.p
+import io.kvision.html.span
 import io.kvision.panel.SimplePanel
 import io.kvision.state.ObservableValue
 import io.kvision.state.bind
@@ -23,8 +31,7 @@ private const val COMPANY_INFO_OBSERVER_RESET_PASSWORD_LOGIN_PAGE = "companyInfo
 private const val COMPANY_INFO_OBSERVER_VERSION = "companyInfoObserverVersion"
 
 @OptIn(ExperimentalSerializationApi::class)
-class LoginPage(): SimplePanel() {
-
+class LoginPage() : SimplePanel() {
     private val errorMessage: ObservableValue<String> = ObservableValue("")
 
     init {
@@ -37,7 +44,7 @@ class LoginPage(): SimplePanel() {
                 errorDiv?.show()
                 errorDiv?.getElementJQuery()?.hide(0)
             }
-            errorDiv?.getElementJQuery()?.slideToggle(300).also {_it ->
+            errorDiv?.getElementJQuery()?.slideToggle(300).also { _it ->
                 when (it) {
                     "" -> errorDiv?.getElementJQuery()?.fadeOut(300, "linear")
                     else -> {
@@ -68,12 +75,12 @@ class LoginPage(): SimplePanel() {
                                         form {
                                             ObservableManager.setSubscriber(COMPANY_INFO_OBSERVER_LOGIN_PAGE) {
                                                 tenantInfoObserver.subscribe {
-                                                    if(it != null) {
+                                                    if (it != null) {
                                                         div(className = "d-grid gap-2 mt-3") {
                                                             button(
                                                                 "Login using SSO",
                                                                 type = ButtonType.BUTTON,
-                                                                className = "btn btn-lg btn-danger"
+                                                                className = "btn btn-lg btn-danger",
                                                             ).onClick {
                                                                 window.location.href = BACKEND_OAUTH2_LOGIN_ROUTE
                                                             }
@@ -86,7 +93,7 @@ class LoginPage(): SimplePanel() {
                                 }
                                 ObservableManager.setSubscriber(COMPANY_INFO_OBSERVER_RESET_PASSWORD_LOGIN_PAGE) {
                                     tenantInfoObserver.subscribe {
-                                        if(it?.cpanel == true) {
+                                        if (it?.cpanel == true) {
                                             div(className = "text-center gap-2 mb-3") {
                                                 span("Forgot your password?&nbsp;", rich = true)
                                                 link("Reset here", "/app/reset-password", dataNavigo = true).toString()
@@ -105,9 +112,14 @@ class LoginPage(): SimplePanel() {
                                                     span("${it.systemVersion} | ")
                                                     span(
                                                         "Change Log",
-                                                        className = "cursor-pointer"
+                                                        className = "cursor-pointer",
                                                     ).onClick {
-                                                        val changeLogs = AppEngine.tenantService.changeLogs.ifEmpty { listOf("No changelog available") }
+                                                        val changeLogs =
+                                                            AppEngine.tenantService.changeLogs.ifEmpty {
+                                                                listOf(
+                                                                    "No changelog available",
+                                                                )
+                                                            }
                                                         sweetAlert.fire(
                                                             Json.encodeToDynamic(
                                                                 mapOf(
@@ -115,9 +127,9 @@ class LoginPage(): SimplePanel() {
                                                                     "html" to Utils.formatChangeLogHtml(changeLogs),
                                                                     "icon" to "info",
                                                                     "confirmButtonText" to "Close",
-                                                                    "width" to "600px"
-                                                                )
-                                                            )
+                                                                    "width" to "600px",
+                                                                ),
+                                                            ),
                                                         )
                                                     }
                                                 }

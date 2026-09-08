@@ -8,5 +8,5 @@ data class TwoFASecretPayload(
     var secret: String? = null,
     var code: Int? = null,
     var enabled: Boolean? = null,
-    var scratchCodes: List<String>? = ArrayList()
+    var scratchCodes: List<String>? = ArrayList(),
 )

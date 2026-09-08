@@ -12,9 +12,23 @@ import io.kvision.core.onClick
 import io.kvision.core.onEvent
 import io.kvision.form.form
 import io.kvision.form.text.TextInput
-import io.kvision.html.*
+import io.kvision.html.ButtonType
+import io.kvision.html.Div
+import io.kvision.html.InputType
+import io.kvision.html.button
+import io.kvision.html.div
+import io.kvision.html.h1
+import io.kvision.html.label
+import io.kvision.html.link
+import io.kvision.html.main
+import io.kvision.html.p
+import io.kvision.html.span
 import io.kvision.panel.SimplePanel
-import io.kvision.rest.*
+import io.kvision.rest.HttpMethod
+import io.kvision.rest.RemoteRequestException
+import io.kvision.rest.RestClient
+import io.kvision.rest.RestResponse
+import io.kvision.rest.request
 import io.kvision.state.ObservableValue
 import io.kvision.state.bind
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -160,9 +174,14 @@ class ResetPasswordRequestPage() : SimplePanel() {
                                                             span("${it.systemVersion} | ")
                                                             span(
                                                                 "Change Log",
-                                                                className = "cursor-pointer"
+                                                                className = "cursor-pointer",
                                                             ).onClick {
-                                                                val changeLogs = AppEngine.tenantService.changeLogs.ifEmpty { listOf("No changelog available") }
+                                                                val changeLogs =
+                                                                    AppEngine.tenantService.changeLogs.ifEmpty {
+                                                                        listOf(
+                                                                            "No changelog available",
+                                                                        )
+                                                                    }
                                                                 sweetAlert.fire(
                                                                     Json.encodeToDynamic(
                                                                         mapOf(
@@ -170,9 +189,9 @@ class ResetPasswordRequestPage() : SimplePanel() {
                                                                             "html" to Utils.formatChangeLogHtml(changeLogs),
                                                                             "icon" to "info",
                                                                             "confirmButtonText" to "Close",
-                                                                            "width" to "600px"
-                                                                        )
-                                                                    )
+                                                                            "width" to "600px",
+                                                                        ),
+                                                                    ),
                                                                 )
                                                             }
                                                         }

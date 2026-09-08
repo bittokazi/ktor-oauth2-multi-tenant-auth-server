@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class RoleList(
     val pages: Int,
     val records: Int,
-    val roles: List<Role>
+    val roles: List<Role>,
 )

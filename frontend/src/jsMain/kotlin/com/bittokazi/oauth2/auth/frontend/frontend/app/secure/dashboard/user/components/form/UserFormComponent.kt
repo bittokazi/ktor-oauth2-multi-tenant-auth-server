@@ -1,7 +1,5 @@
 package com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.user.components.form
 
-import com.bittokazi.oauth2.auth.frontend.frontend.base.models.Role
-import com.bittokazi.oauth2.auth.frontend.frontend.base.models.User
 import com.bittokazi.kvision.spa.framework.base.components.form.FormButton
 import com.bittokazi.kvision.spa.framework.base.components.form.FormControl
 import com.bittokazi.kvision.spa.framework.base.components.form.FormSelectInput
@@ -9,6 +7,8 @@ import com.bittokazi.kvision.spa.framework.base.components.form.FormTextInput
 import com.bittokazi.kvision.spa.framework.base.components.form.buttonComponent
 import com.bittokazi.kvision.spa.framework.base.components.form.selectInputComponent
 import com.bittokazi.kvision.spa.framework.base.components.form.textInputComponent
+import com.bittokazi.oauth2.auth.frontend.frontend.base.models.Role
+import com.bittokazi.oauth2.auth.frontend.frontend.base.models.User
 import io.kvision.core.Container
 import io.kvision.core.UNIT
 import io.kvision.core.getElementJQuery
@@ -161,27 +161,26 @@ fun Container.userPasswordFormComponent(
                     add(textInputComponent(userPasswordUpdateForm.newPassword, "", inputType = InputType.PASSWORD))
                 }
                 div(className = "col-md-6")
-            } else
-                {
-                    div(className = "col-md-6") {
-                        add(textInputComponent(userPasswordUpdateForm.currentPassword, "", inputType = InputType.PASSWORD))
-                    }
-                    div(className = "col-md-6")
-                    div(className = "col-md-6") {
-                        add(textInputComponent(userPasswordUpdateForm.newPassword, "", inputType = InputType.PASSWORD))
-                    }
-                    div(className = "col-md-6")
-                    div(className = "col-md-6") {
-                        add(
-                            textInputComponent(
-                                userPasswordUpdateForm.newConfirmPassword,
-                                "",
-                                inputType = InputType.PASSWORD,
-                            ),
-                        )
-                    }
-                    div(className = "col-md-6")
+            } else {
+                div(className = "col-md-6") {
+                    add(textInputComponent(userPasswordUpdateForm.currentPassword, "", inputType = InputType.PASSWORD))
                 }
+                div(className = "col-md-6")
+                div(className = "col-md-6") {
+                    add(textInputComponent(userPasswordUpdateForm.newPassword, "", inputType = InputType.PASSWORD))
+                }
+                div(className = "col-md-6")
+                div(className = "col-md-6") {
+                    add(
+                        textInputComponent(
+                            userPasswordUpdateForm.newConfirmPassword,
+                            "",
+                            inputType = InputType.PASSWORD,
+                        ),
+                    )
+                }
+                div(className = "col-md-6")
+            }
             div(className = "col-md-3") {
                 add(buttonComponent(userPasswordUpdateForm.submitButton, "Update Password"))
             }
@@ -323,7 +322,9 @@ class UserPasswordUpdateForm(val self: Boolean) : FormControl<Unit, Unit> {
         FormTextInput(
             label = "New Password",
             placeholder = "Enter new password",
-            defaultInvalidFeedback = "New password must be at least 8 characters long, contain uppercase, lowercase, number and special character",
+            defaultInvalidFeedback =
+                "New password must be at least 8 characters long, " +
+                    "contain uppercase, lowercase, number and special character",
         ) {
             if (self) {
                 val regex = Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,}\$")
@@ -412,5 +413,8 @@ fun userPasswordFormErrorHandler(
 }
 
 enum class UserSearchForm {
-    ROLES, EMAIL, FIRST_NAME, LAST_NAME
+    ROLES,
+    EMAIL,
+    FIRST_NAME,
+    LAST_NAME,
 }

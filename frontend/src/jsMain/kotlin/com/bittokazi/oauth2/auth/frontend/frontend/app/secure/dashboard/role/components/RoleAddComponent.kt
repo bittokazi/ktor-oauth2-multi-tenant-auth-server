@@ -4,8 +4,8 @@ import com.bittokazi.kvision.spa.framework.base.common.SpaAppEngine
 import com.bittokazi.kvision.spa.framework.base.utils.sweetAlert
 import com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.role.RoleService
 import com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.role.components.form.RoleForm
-import com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.role.components.form.roleFormErrorHandler
 import com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.role.components.form.roleFormComponent
+import com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboard.role.components.form.roleFormErrorHandler
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine.APP_DASHBOARD_ROLE_ROUTE
 import com.bittokazi.oauth2.auth.frontend.frontend.base.models.Role
 import io.kvision.html.div
@@ -16,14 +16,14 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToDynamic
 
 @OptIn(ExperimentalSerializationApi::class)
-class RoleAddComponent: SimplePanel() {
+class RoleAddComponent : SimplePanel() {
     val roleForm = RoleForm()
 
     init {
         div {
             roleFormComponent(
                 roleForm = roleForm,
-                role = null
+                role = null,
             ) {
                 when (roleForm.isValid()) {
                     true -> {
@@ -32,16 +32,16 @@ class RoleAddComponent: SimplePanel() {
                                 id = id,
                                 roleKey = roleForm.roleKey.input.value.orEmpty(),
                                 name = roleForm.name.input.value.orEmpty(),
-                            )
+                            ),
                         ).then {
                             sweetAlert.fire(
                                 Json.encodeToDynamic(
                                     mapOf(
                                         "title" to "Success",
                                         "text" to "Added Role Successfully.",
-                                        "icon" to "success"
-                                    )
-                                )
+                                        "icon" to "success",
+                                    ),
+                                ),
                             )
                             SpaAppEngine.routing.navigate(APP_DASHBOARD_ROLE_ROUTE)
                         }.catch { throwable ->
@@ -57,7 +57,6 @@ class RoleAddComponent: SimplePanel() {
                         }
                     }
                     false -> {
-
                     }
                 }
             }

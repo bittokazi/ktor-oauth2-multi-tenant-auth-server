@@ -2,15 +2,18 @@
 exposed = "1.2.0"
 h2 = "2.3.232"
 koin = "3.5.6"
-kotlin = "2.2.20"
-ktor = "3.4.0"
+kotlin = "2.3.20"
+ktor = "3.5.2"
 logback = "1.5.27"
 postgres = "42.7.8"
 hikari = "4.0.3"
 flyway = "9.22.3"
 bcrypt = "0.10.2"
 nimbus-jose-jwt = "10.6"
-ktor-oauth-authorization-server = "1.3.5"
+ktor-oauth-authorization-server = "1.3.6"
+jakarta-mail = "2.0.4"
+googleauth = "1.4.0"
+ktlint = "12.1.0"
 
 [libraries]
 ktor-server-rate-limiting = { module = "io.github.flaxoos:ktor-server-rate-limiting", version = "2.2.1" }
@@ -43,6 +46,7 @@ ktor-client-apache = { module = "io.ktor:ktor-client-apache", version.ref = "kto
 ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor" }
 ktor-server-openapi = { module = "io.ktor:ktor-server-openapi", version.ref = "ktor" }
 ktor-server-swagger = { module = "io.ktor:ktor-server-swagger", version.ref = "ktor" }
+ktor-server-routing-openapi = { module = "io.ktor:ktor-server-routing-openapi", version.ref = "ktor" }
 ktor-server-partial-content = { module = "io.ktor:ktor-server-partial-content", version.ref = "ktor" }
 ktor-server-default-headers = { module = "io.ktor:ktor-server-default-headers", version.ref = "ktor" }
 ktor-server-forwarded-header = { module = "io.ktor:ktor-server-forwarded-header", version.ref = "ktor" }
@@ -62,8 +66,11 @@ ktor-serialization-gson = { module = "io.ktor:ktor-serialization-gson", version.
 nimbus-jose-jwt = { module = "com.nimbusds:nimbus-jose-jwt", version.ref = "nimbus-jose-jwt" }
 ktor-server-di = { module = "io.ktor:ktor-server-di", version.ref = "ktor" }
 ktor-oauth-authorization-server = { module = "com.bittokazi.sonartype:ktor-oauth-authorization-server", version.ref = "ktor-oauth-authorization-server" }
+jakarta-mail = { module = "org.eclipse.angus:jakarta.mail", version.ref = "jakarta-mail" }
+googleauth = { module = "com.warrenstrange:googleauth", version.ref = "googleauth" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }

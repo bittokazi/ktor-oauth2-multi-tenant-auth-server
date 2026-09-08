@@ -14,5 +14,5 @@ data class User(
     var newPassword: String? = null,
     var newConfirmPassword: String? = null,
     var adminTenantUser: Boolean = false,
-    var twoFaEnabled: Boolean? = null
+    var twoFaEnabled: Boolean? = null,
 )

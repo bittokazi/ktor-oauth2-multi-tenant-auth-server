@@ -11,7 +11,6 @@ import kotlinx.serialization.json.encodeToDynamic
 import kotlin.js.Promise
 
 object ClientService {
-
     private val clientsBaseUrl = "${restService.BASE_URL}/api/v1/clients"
 
     fun getAll(): Promise<RestResponse<List<Client>>> {
@@ -43,21 +42,24 @@ object ClientService {
         return restService.createAuthCall {
             restService.getClient().request<Client>(clientsBaseUrl) {
                 method = HttpMethod.POST
-                data =  Json.encodeToDynamic(client)
+                data = Json.encodeToDynamic(client)
             }
         }
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun update(client: Client, isNewSecret: Boolean): Promise<RestResponse<Client>> {
+    fun update(
+        client: Client,
+        isNewSecret: Boolean,
+    ): Promise<RestResponse<Client>> {
         var query = ""
         if (isNewSecret) {
-           query += "?newSecret=true"
+            query += "?newSecret=true"
         }
         return restService.createAuthCall {
             restService.getClient().request<Client>("$clientsBaseUrl/${client.id}$query") {
                 method = HttpMethod.PUT
-                data =  Json.encodeToDynamic(client)
+                data = Json.encodeToDynamic(client)
             }
         }
     }

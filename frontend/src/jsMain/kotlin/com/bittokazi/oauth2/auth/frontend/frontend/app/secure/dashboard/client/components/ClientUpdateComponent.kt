@@ -15,9 +15,9 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToDynamic
 
 @OptIn(ExperimentalSerializationApi::class)
-class ClientUpdateComponent (
-    id: String
-): SimplePanel() {
+class ClientUpdateComponent(
+    id: String,
+) : SimplePanel() {
     val clientForm = ClientForm(update = true)
 
     init {
@@ -26,7 +26,7 @@ class ClientUpdateComponent (
                 clientFormComponent(
                     clientForm = clientForm,
                     client = client.data,
-                    update = true
+                    update = true,
                 ) {
                     when (clientForm.isValid()) {
                         true -> {
@@ -36,17 +36,19 @@ class ClientUpdateComponent (
                                     clientId = clientForm.clientId.getValue(),
                                     clientName = clientForm.clientName.getValue(),
                                     scopes = clientForm.scope.getValue().split(",").map { it.trim() },
-                                    grantTypes = clientForm.authorizedGrantTypes.getValue().split(",")
-                                        .map { it.trim() },
-                                    redirectUris = clientForm.webServerRedirectUri.getValue().split(",")
-                                        .map { it.trim() },
+                                    grantTypes =
+                                        clientForm.authorizedGrantTypes.getValue().split(",")
+                                            .map { it.trim() },
+                                    redirectUris =
+                                        clientForm.webServerRedirectUri.getValue().split(",")
+                                            .map { it.trim() },
                                     accessTokenValidity = clientForm.accessTokenValidity.getValue().toLong(),
                                     refreshTokenValidity = clientForm.refreshTokenValidity.getValue().toLong(),
                                     consentRequired = clientForm.requireConsent.getValue(),
                                     clientType = clientForm.clientType.getValue()!!,
                                     postLogoutRedirectUri = clientForm.postLogoutRedirectUri.getValue(),
                                 ),
-                                clientForm.generateSecret.getValue()
+                                clientForm.generateSecret.getValue(),
                             ).then { updateResponse ->
                                 when (updateResponse.data.newSecret) {
                                     null -> {
@@ -55,9 +57,9 @@ class ClientUpdateComponent (
                                                 mapOf(
                                                     "title" to "Success",
                                                     "text" to "Updated Client with ID [$id]",
-                                                    "icon" to "success"
-                                                )
-                                            )
+                                                    "icon" to "success",
+                                                ),
+                                            ),
                                         )
                                     }
                                     else -> {
@@ -71,13 +73,13 @@ class ClientUpdateComponent (
                                                     "confirmButtonText" to "Dismiss",
                                                     "allowOutsideClick" to null,
                                                     "html" to "<p style=\"text-align: justify\">" +
-                                                            "New Secret Generated<br />" +
-                                                            "<span style=\"font-weight: bold;\">" +
-                                                            "ID:</span>&nbsp;${updateResponse.data.clientId}<br />" +
-                                                            "<span style=\"font-weight: bold;\">" +
-                                                            "Secret:</span>&nbsp;${updateResponse.data.newSecret}</p>"
-                                                )
-                                            )
+                                                        "New Secret Generated<br />" +
+                                                        "<span style=\"font-weight: bold;\">" +
+                                                        "ID:</span>&nbsp;${updateResponse.data.clientId}<br />" +
+                                                        "<span style=\"font-weight: bold;\">" +
+                                                        "Secret:</span>&nbsp;${updateResponse.data.newSecret}</p>",
+                                                ),
+                                            ),
                                         )
                                     }
                                 }
@@ -87,12 +89,10 @@ class ClientUpdateComponent (
                             }
                         }
                         false -> {
-
                         }
                     }
                 }
             }.catch {
-
             }
         }
     }

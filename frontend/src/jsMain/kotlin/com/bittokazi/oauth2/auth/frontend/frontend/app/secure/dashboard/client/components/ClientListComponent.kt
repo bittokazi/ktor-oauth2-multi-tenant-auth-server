@@ -27,8 +27,7 @@ import kotlinx.serialization.json.encodeToDynamic
 import org.w3c.dom.get
 
 @OptIn(ExperimentalSerializationApi::class)
-class ClientListComponent: SimplePanel() {
-
+class ClientListComponent : SimplePanel() {
     val deleteObserver = ObservableValue<Boolean?>(null)
 
     fun delete(id: String) {
@@ -38,9 +37,9 @@ class ClientListComponent: SimplePanel() {
                     mapOf(
                         "title" to "Success",
                         "text" to "Deleted Client with ID [$id]",
-                        "icon" to "success"
-                    )
-                )
+                        "icon" to "success",
+                    ),
+                ),
             )
             deleteObserver.setState(true)
         }.catch {
@@ -49,9 +48,9 @@ class ClientListComponent: SimplePanel() {
                     mapOf(
                         "title" to "Error",
                         "text" to "Unable to delete",
-                        "icon" to "error"
-                    )
-                )
+                        "icon" to "error",
+                    ),
+                ),
             )
             deleteObserver.setState(true)
         }
@@ -86,7 +85,7 @@ class ClientListComponent: SimplePanel() {
                 fun tableBody(): Tbody {
                     return tbody {
                         ClientService.getAll().then {
-                            it.data.forEachIndexed {  index, client ->
+                            it.data.forEachIndexed { index, client ->
                                 tr {
                                     td {
                                         content = client.id
@@ -107,22 +106,23 @@ class ClientListComponent: SimplePanel() {
                                         link(
                                             "",
                                             AppEngine.APP_DASHBOARD_CLIENT_UPDATE_ROUTE(
-                                                client.id!!
+                                                client.id!!,
                                             ),
-                                            dataNavigo = true
+                                            dataNavigo = true,
                                         ) {
                                             span(className = "feather-sm me-1") {
                                                 setAttribute("data-feather", "edit")
                                             }
-                                            + " Edit"
+                                            +" Edit"
                                         }
                                         span {
                                             content = " | "
                                         }
                                         span {
-                                            color = Color.name(
-                                                Col.RED
-                                            )
+                                            color =
+                                                Color.name(
+                                                    Col.RED,
+                                                )
                                             cursor = Cursor.POINTER
                                             onClick {
                                                 delete(client.id)
@@ -131,7 +131,7 @@ class ClientListComponent: SimplePanel() {
                                             span(className = "feather-sm me-1") {
                                                 setAttribute("data-feather", "trash")
                                             }
-                                            + "Delete"
+                                            +"Delete"
                                         }
                                     }
                                 }
@@ -148,7 +148,7 @@ class ClientListComponent: SimplePanel() {
                 add(tableBody())
 
                 deleteObserver.subscribe {
-                    if(it !=null && it) {
+                    if (it != null && it) {
                         removeAt(1)
                         add(tableBody())
                         window.setTimeout({

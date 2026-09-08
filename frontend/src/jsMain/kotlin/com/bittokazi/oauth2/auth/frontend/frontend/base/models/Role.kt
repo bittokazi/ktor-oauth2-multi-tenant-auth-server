@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class Role(
     val id: String? = null,
     val roleKey: String? = "",
-    val name: String? = ""
+    val name: String? = "",
 )

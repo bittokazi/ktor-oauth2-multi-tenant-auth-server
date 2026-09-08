@@ -16,8 +16,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToDynamic
 
 @OptIn(ExperimentalSerializationApi::class)
-class TenantAddComponent: SimplePanel() {
-
+class TenantAddComponent : SimplePanel() {
     val tenantForm = TenantForm()
 
     init {
@@ -25,7 +24,7 @@ class TenantAddComponent: SimplePanel() {
             tenantFormComponent(
                 update = false,
                 tenantForm = tenantForm,
-                tenant = null
+                tenant = null,
             ) { fileResponse ->
                 if (tenantForm.isValid()) {
                     tenantForm.submitButton.showLoading()
@@ -42,17 +41,17 @@ class TenantAddComponent: SimplePanel() {
                             defaultRedirectUrl = tenantForm.defaultRedirectUrl.getValue(),
                             enableConfigPanel = tenantForm.enableConfigPanel.getValue(),
                             enableCustomTemplate = tenantForm.enableCustomTemplate.getValue(),
-                            customTemplateLocation = fileResponse?.get("location")?.toString() ?: ""
-                        )
+                            customTemplateLocation = fileResponse?.get("location")?.toString() ?: "",
+                        ),
                     ).then {
                         sweetAlert.fire(
                             Json.encodeToDynamic(
                                 mapOf(
                                     "title" to "Success",
                                     "text" to "Added Tenant Successfully.",
-                                    "icon" to "success"
-                                )
-                            )
+                                    "icon" to "success",
+                                ),
+                            ),
                         )
                         SpaAppEngine.routing.navigate(APP_DASHBOARD_TENANT_ROUTE)
                     }.catch { throwable ->

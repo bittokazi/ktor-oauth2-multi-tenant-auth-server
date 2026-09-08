@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.ktor)
     alias(libs.plugins.kotlin.plugin.serialization)
     // linter
-    id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
+    alias(libs.plugins.ktlint)
 }
 
 group = "com.bittokazi.watch.navigator"
@@ -63,10 +63,10 @@ dependencies {
     implementation(libs.nimbus.jose.jwt)
     implementation(libs.ktor.server.di)
     implementation(libs.ktor.oauth.authorization.server)
-    implementation("org.eclipse.angus:jakarta.mail:2.0.4")
-    implementation("com.warrenstrange:googleauth:1.4.0")
-    implementation("io.ktor:ktor-server-swagger:3.4.0")
-    implementation("io.ktor:ktor-server-routing-openapi:3.4.0")
+    implementation(libs.jakarta.mail)
+    implementation(libs.googleauth)
+    implementation(libs.ktor.server.swagger)
+    implementation(libs.ktor.server.routing.openapi)
 
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)

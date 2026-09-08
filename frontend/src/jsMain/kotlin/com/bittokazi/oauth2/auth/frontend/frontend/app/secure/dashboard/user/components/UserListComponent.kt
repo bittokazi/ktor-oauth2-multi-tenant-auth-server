@@ -38,36 +38,41 @@ class UserListComponent : SimplePanel() {
     val count = 10
     var initComplete = false
 
-    val searchForm = mapOf(
-        UserSearchForm.ROLES to FormSelectInput(
-            label = "Roles",
-            defaultInvalidFeedback = "At least one role must be selected",
-        ) {
-            return@FormSelectInput it != -1
-        },
-        UserSearchForm.EMAIL to FormTextInput(
-            label = "Email",
-            placeholder = "Search with email",
-        ) {
-            return@FormTextInput true
-        },
-        UserSearchForm.FIRST_NAME to FormTextInput(
-            label = "Firstname",
-            placeholder = "Search with firstname",
-        ) {
-            return@FormTextInput true
-        },
-        UserSearchForm.LAST_NAME to FormTextInput(
-            label = "Lastname",
-            placeholder = "Search with lastname",
-        ) {
-            return@FormTextInput true
-        }
-    )
+    val searchForm =
+        mapOf(
+            UserSearchForm.ROLES to
+                FormSelectInput(
+                    label = "Roles",
+                    defaultInvalidFeedback = "At least one role must be selected",
+                ) {
+                    return@FormSelectInput it != -1
+                },
+            UserSearchForm.EMAIL to
+                FormTextInput(
+                    label = "Email",
+                    placeholder = "Search with email",
+                ) {
+                    return@FormTextInput true
+                },
+            UserSearchForm.FIRST_NAME to
+                FormTextInput(
+                    label = "Firstname",
+                    placeholder = "Search with firstname",
+                ) {
+                    return@FormTextInput true
+                },
+            UserSearchForm.LAST_NAME to
+                FormTextInput(
+                    label = "Lastname",
+                    placeholder = "Search with lastname",
+                ) {
+                    return@FormTextInput true
+                },
+        )
 
     fun getUsers() {
         var query = ""
-        if(initComplete) {
+        if (initComplete) {
             val queryList = mutableListOf<String>()
 
             if (!(searchForm[UserSearchForm.ROLES] as FormSelectInput).getValue().isNullOrEmpty()) {
@@ -201,7 +206,7 @@ class UserListComponent : SimplePanel() {
                                     "",
                                 ),
                             )
-                        }
+                        },
                     )
 
                     add(
@@ -213,7 +218,7 @@ class UserListComponent : SimplePanel() {
                                     false,
                                 ),
                             )
-                        }
+                        },
                     )
 
                     add(
@@ -225,7 +230,7 @@ class UserListComponent : SimplePanel() {
                                     false,
                                 ),
                             )
-                        }
+                        },
                     )
 
                     add(
@@ -237,7 +242,7 @@ class UserListComponent : SimplePanel() {
                                     false,
                                 ),
                             )
-                        }
+                        },
                     )
                 }
 

@@ -13,7 +13,7 @@ import io.kvision.html.tag
 import io.kvision.html.ul
 import io.kvision.panel.SimplePanel
 
-class DashboardHomePage(): SimplePanel() {
+class DashboardHomePage() : SimplePanel() {
     init {
         div(className = "row") {
             div(className = "col-md-4 col-xl-3") {
@@ -24,7 +24,7 @@ class DashboardHomePage(): SimplePanel() {
                     div(className = "card-body text-center") {
                         image(
                             src = AppEngine.authService.user!!.image,
-                            className = "img-fluid rounded-circle mb-2"
+                            className = "img-fluid rounded-circle mb-2",
                         ) {
                             width = 128 to UNIT.px
                             height = 128 to UNIT.px
@@ -44,11 +44,11 @@ class DashboardHomePage(): SimplePanel() {
                                 span(className = "feather-sm me-1") {
                                     setAttribute("data-feather", "mail")
                                 }
-                                + "Email "
+                                +"Email "
                                 link(
                                     label = AppEngine.authService.user!!.email!!,
                                     url = "/app/dashboard",
-                                    dataNavigo = true
+                                    dataNavigo = true,
                                 )
                             }
                         }

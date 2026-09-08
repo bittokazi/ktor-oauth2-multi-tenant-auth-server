@@ -10,31 +10,32 @@ import com.bittokazi.oauth2.auth.frontend.frontend.app.public.signin.LoginPage
 import com.bittokazi.oauth2.auth.frontend.frontend.app.secure.dashboardModule
 import com.bittokazi.oauth2.auth.frontend.frontend.base.common.AppEngine
 
-fun rootModule(): ApplicationModule = DefaultRootApplicationModule(
-    loginPage = {
-        LoginPage()
-    },
-    securedModule = dashboardModule(),
-    authInformationProvider = AppEngine.authService,
-    RouterConfiguration(
-        route = AppEngine.APP_BASE_ROUTE,
-        title = "Home",
-        view = {
-            HomePage()
-        }
-    ),
-    RouterConfiguration(
-        route = "/app/reset-password",
-        title = "AuthKit | Request Reset Password",
-        view = {
-            ResetPasswordRequestPage()
+fun rootModule(): ApplicationModule =
+    DefaultRootApplicationModule(
+        loginPage = {
+            LoginPage()
         },
-    ),
-    RouterConfiguration(
-        route = "/app/reset-password/:token",
-        title = "AuthKit | Reset Password",
-        view = {
-            ResetPasswordPage(it.data.token)
-        },
-    ),
-)
+        securedModule = dashboardModule(),
+        authInformationProvider = AppEngine.authService,
+        RouterConfiguration(
+            route = AppEngine.APP_BASE_ROUTE,
+            title = "Home",
+            view = {
+                HomePage()
+            },
+        ),
+        RouterConfiguration(
+            route = "/app/reset-password",
+            title = "AuthKit | Request Reset Password",
+            view = {
+                ResetPasswordRequestPage()
+            },
+        ),
+        RouterConfiguration(
+            route = "/app/reset-password/:token",
+            title = "AuthKit | Reset Password",
+            view = {
+                ResetPasswordPage(it.data.token)
+            },
+        ),
+    )

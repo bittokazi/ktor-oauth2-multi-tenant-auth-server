@@ -3,7 +3,7 @@ package com.bittokazi.oauth2.auth.frontend.frontend.base.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Tenant (
+data class Tenant(
     val id: String? = null,
     var companyKey: String? = null,
     var enabled: Boolean = false,
@@ -15,5 +15,5 @@ data class Tenant (
     var defaultRedirectUrl: String? = null,
     var enableConfigPanel: Boolean? = null,
     var enableCustomTemplate: Boolean? = null,
-    var customTemplateLocation: String? = null
+    var customTemplateLocation: String? = null,
 )

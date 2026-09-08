@@ -18,9 +18,8 @@ import kotlinx.serialization.json.jsonPrimitive
 
 @OptIn(ExperimentalSerializationApi::class)
 class TenantUpdateComponent(
-    id: String
-): SimplePanel() {
-
+    id: String,
+) : SimplePanel() {
     val tenantForm = TenantForm()
 
     init {
@@ -29,7 +28,7 @@ class TenantUpdateComponent(
                 tenantFormComponent(
                     update = true,
                     tenantForm = tenantForm,
-                    tenant = tenant.data
+                    tenant = tenant.data,
                 ) { fileResponse ->
                     if (tenantForm.isValid()) {
                         tenantForm.submitButton.showLoading()
@@ -46,17 +45,17 @@ class TenantUpdateComponent(
                                 defaultRedirectUrl = tenantForm.defaultRedirectUrl.getValue(),
                                 enableConfigPanel = tenantForm.enableConfigPanel.getValue(),
                                 enableCustomTemplate = tenantForm.enableCustomTemplate.getValue(),
-                                customTemplateLocation = fileResponse?.get("location")?.jsonPrimitive?.content ?: ""
-                            )
+                                customTemplateLocation = fileResponse?.get("location")?.jsonPrimitive?.content ?: "",
+                            ),
                         ).then {
                             sweetAlert.fire(
                                 Json.encodeToDynamic(
                                     mapOf(
                                         "title" to "Success",
                                         "text" to "Updated Tenant Successfully.",
-                                        "icon" to "success"
-                                    )
-                                )
+                                        "icon" to "success",
+                                    ),
+                                ),
                             )
                             SpaAppEngine.routing.navigate(APP_DASHBOARD_TENANT_ROUTE)
                         }.catch { throwable ->
