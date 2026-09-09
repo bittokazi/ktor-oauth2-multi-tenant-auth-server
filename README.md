@@ -1,8 +1,12 @@
 # Ktor OAuth2 Multi-Tenant Auth Server
 
+[![Build Passing](https://github.com/bittokazi/ktor-oauth2-multi-tenant-auth-server/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/bittokazi/ktor-oauth2-multi-tenant-auth-server/actions/workflows/build.yml)
+[![Lint](https://github.com/bittokazi/ktor-oauth2-multi-tenant-auth-server/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/bittokazi/ktor-oauth2-multi-tenant-auth-server/actions/workflows/lint.yml)
+[![Release: Maven Central](https://github.com/bittokazi/ktor-oauth2-multi-tenant-auth-server/actions/workflows/release.yml/badge.svg)](https://github.com/bittokazi/ktor-oauth2-multi-tenant-auth-server/actions/workflows/release.yml)
+
 A Kotlin + Ktor-based identity platform for running a multi-tenant OAuth 2.0 / OpenID Connect authorization server with a tenant-aware admin dashboard, role management, password resets, and 2FA support.
 
-Current release: `v1.0.0.alpha22`
+Current release: `v1.3.0`
 
 This project extends the base Ktor OAuth authorization server with business features such as tenancy, custom tenant templates, client management, user administration, and a gateway-backed deployment model.
 
