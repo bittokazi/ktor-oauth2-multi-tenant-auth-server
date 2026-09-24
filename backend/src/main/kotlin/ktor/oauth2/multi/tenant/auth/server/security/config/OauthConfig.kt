@@ -11,4 +11,5 @@ data class OauthConfig(
     @Property("app.name") val appName: String,
     @Property("app.template-folder") val templateFolder: String,
     @Property("oauth.enable-issuer-provider") val enableIssuerProvider: Boolean = false,
+    @Property("oauth.oidc-user-info-extended") val oidcUserInfoExtended: Boolean = false,
 )

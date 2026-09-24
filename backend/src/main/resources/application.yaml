@@ -25,6 +25,7 @@ oauth:
   enabled: true
   issuer: "http://0.0.0.0:5035"
   no-redirect-clients: []
+  oidc-user-info-extended: false
   session:
     timeout: 3600 # session timeout in seconds
     encryption-key: 3204f2660eb548889f90d4ad996d5396 # has to be 32 character. set your own
