@@ -11,6 +11,7 @@ import com.bittokazi.ktor.auth.services.SessionExtender
 import com.bittokazi.ktor.auth.services.TemplateCustomizer
 import com.bittokazi.ktor.auth.services.TemplateCustomizerFactory
 import com.bittokazi.ktor.auth.services.issuer.IssuerProvider
+import com.bittokazi.ktor.auth.services.oidc.OidcUserInfoCustomizer
 import com.bittokazi.ktor.auth.services.providers.OauthAuthorizationCodeService
 import com.bittokazi.ktor.auth.services.providers.OauthClientService
 import com.bittokazi.ktor.auth.services.providers.OauthConsentService
@@ -37,6 +38,7 @@ import ktor.oauth2.multi.tenant.auth.server.security.config.LoginOptionServiceIm
 import ktor.oauth2.multi.tenant.auth.server.security.config.LogoutActionCustomizerImpl
 import ktor.oauth2.multi.tenant.auth.server.security.config.OauthConfig
 import ktor.oauth2.multi.tenant.auth.server.security.config.OauthTemplateCustomizerImpl
+import ktor.oauth2.multi.tenant.auth.server.security.config.OidcUserInfoCustomizerImpl
 import ktor.oauth2.multi.tenant.auth.server.security.config.SessionExtenderImpl
 import ktor.oauth2.multi.tenant.auth.server.security.config.tenantInterceptorPlugin
 import ktor.oauth2.multi.tenant.auth.server.security.controllers.otpRoute
@@ -66,6 +68,7 @@ fun Application.configureSecurityModule() {
             oauthAuthenticationConfig(oauthConfig.issuer)
         }
         dependencies {
+            provide<OidcUserInfoCustomizer>(OidcUserInfoCustomizerImpl::class)
             provide<OauthAuthorizationCodeService>(OauthAuthorizationCodeServiceDatabaseProvider::class)
             provide<OauthTokenService>(OauthTokenServiceDatabaseProvider::class)
             provide<OauthConsentService>(OauthConsentServiceDatabaseProvider::class)
