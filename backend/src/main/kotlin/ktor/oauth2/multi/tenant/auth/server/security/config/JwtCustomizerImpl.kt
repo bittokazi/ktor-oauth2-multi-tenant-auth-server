@@ -59,6 +59,10 @@ class JwtCustomizerImpl(
                     "username" to userDto!!.email,
                 )
 
+            payload += mapOf(
+                "email_verified" to true
+            )
+
             extraTokenClaimConfig.extraTokenClaims
                 .filter { it.clientId == client?.clientId }
                 .forEach {
