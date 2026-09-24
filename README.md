@@ -6,7 +6,7 @@
 
 A Kotlin + Ktor-based identity platform for running a multi-tenant OAuth 2.0 / OpenID Connect authorization server with a tenant-aware admin dashboard, role management, password resets, and 2FA support.
 
-Current release: `v1.3.1`
+Current release: `v1.3.2`
 
 This project extends the base Ktor OAuth authorization server with business features such as tenancy, custom tenant templates, client management, user administration, and a gateway-backed deployment model.
 
