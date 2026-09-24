@@ -68,7 +68,9 @@ fun Application.configureSecurityModule() {
             oauthAuthenticationConfig(oauthConfig.issuer)
         }
         dependencies {
-            provide<OidcUserInfoCustomizer>(OidcUserInfoCustomizerImpl::class)
+            if (oauthConfig.oidcUserInfoExtended) {
+                provide<OidcUserInfoCustomizer>(OidcUserInfoCustomizerImpl::class)
+            }
             provide<OauthAuthorizationCodeService>(OauthAuthorizationCodeServiceDatabaseProvider::class)
             provide<OauthTokenService>(OauthTokenServiceDatabaseProvider::class)
             provide<OauthConsentService>(OauthConsentServiceDatabaseProvider::class)
