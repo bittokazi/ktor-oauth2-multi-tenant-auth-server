@@ -64,6 +64,10 @@ class JwtCustomizerImpl(
                     "email_verified" to true,
                 )
 
+            call?.request?.queryParameters?.get("nonce")?.let { nonce ->
+                payload["nonce"] = nonce
+            }
+
             extraTokenClaimConfig.extraTokenClaims
                 .filter { it.clientId == client?.clientId }
                 .forEach {
