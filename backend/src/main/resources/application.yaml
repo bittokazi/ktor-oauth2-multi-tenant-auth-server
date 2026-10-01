@@ -25,6 +25,8 @@ oauth:
   enabled: true
   issuer: "http://0.0.0.0:5035"
   no-redirect-clients: []
+  enable-issuer-provider: false
+  default-logout-redirect-url: "/app/login"
   oidc-user-info-extended: false
   session:
     timeout: 3600 # session timeout in seconds
@@ -62,3 +64,8 @@ mail-config:
   from: "no-reply@example.com"
   username: no-reply@example.com
   password: password
+
+extra-token-claims: []
+
+auth-code-redirect-uri-customizer:
+  pass-query-parameters: []
