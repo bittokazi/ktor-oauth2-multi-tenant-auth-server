@@ -10,6 +10,7 @@ import com.bittokazi.ktor.auth.services.SessionCustomizer
 import com.bittokazi.ktor.auth.services.SessionExtender
 import com.bittokazi.ktor.auth.services.TemplateCustomizer
 import com.bittokazi.ktor.auth.services.TemplateCustomizerFactory
+import com.bittokazi.ktor.auth.services.authorization.AuthorizationCodeRedirectUriCustomizer
 import com.bittokazi.ktor.auth.services.issuer.IssuerProvider
 import com.bittokazi.ktor.auth.services.oidc.OidcUserInfoCustomizer
 import com.bittokazi.ktor.auth.services.providers.OauthAuthorizationCodeService
@@ -31,6 +32,8 @@ import io.ktor.server.auth.authentication
 import io.ktor.server.plugins.di.dependencies
 import io.ktor.server.plugins.requestvalidation.RequestValidation
 import ktor.oauth2.multi.tenant.auth.server.persistence.repository.TenantRepository
+import ktor.oauth2.multi.tenant.auth.server.security.config.AuthorizationCodeRedirectUriCustomizerConfig
+import ktor.oauth2.multi.tenant.auth.server.security.config.AuthorizationCodeRedirectUriCustomizerImpl
 import ktor.oauth2.multi.tenant.auth.server.security.config.ExtraTokenClaimConfig
 import ktor.oauth2.multi.tenant.auth.server.security.config.IssuerProviderImpl
 import ktor.oauth2.multi.tenant.auth.server.security.config.JwtCustomizerImpl
@@ -52,6 +55,7 @@ fun Application.configureSecurityModule() {
     dependencies {
         provide<OauthConfig>(OauthConfig::class)
         provide<ExtraTokenClaimConfig>(ExtraTokenClaimConfig::class)
+        provide(AuthorizationCodeRedirectUriCustomizerConfig::class)
     }
 
     val oauthConfig: OauthConfig by dependencies
@@ -93,6 +97,8 @@ fun Application.configureSecurityModule() {
             if (oauthConfig.enableIssuerProvider) {
                 provide<IssuerProvider>(IssuerProviderImpl::class)
             }
+
+            provide<AuthorizationCodeRedirectUriCustomizer>(AuthorizationCodeRedirectUriCustomizerImpl::class)
         }
 
         configureOauth2AuthorizationServer(
