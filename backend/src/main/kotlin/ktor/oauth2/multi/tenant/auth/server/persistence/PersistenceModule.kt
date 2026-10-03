@@ -3,6 +3,7 @@ package ktor.oauth2.multi.tenant.auth.server.persistence
 import io.ktor.server.application.Application
 import io.ktor.server.plugins.di.dependencies
 import ktor.oauth2.multi.tenant.auth.server.persistence.repository.ClientRepository
+import ktor.oauth2.multi.tenant.auth.server.persistence.repository.NonceMapRepository
 import ktor.oauth2.multi.tenant.auth.server.persistence.repository.PasswordResetTokenRepository
 import ktor.oauth2.multi.tenant.auth.server.persistence.repository.RoleRepository
 import ktor.oauth2.multi.tenant.auth.server.persistence.repository.TenantRepository
@@ -17,6 +18,7 @@ fun Application.configurePersistenceModule() {
         provide(PasswordResetTokenRepository::class)
         provide(TenantRepository::class)
         provide(ClientRepository::class)
+        provide(NonceMapRepository::class)
         provide(UserTwoFaSecretRepository::class)
         provide(UserTrustedDeviceRepository::class)
     }
