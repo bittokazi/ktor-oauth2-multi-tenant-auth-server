@@ -22,11 +22,17 @@ class AuthorizationCodeRedirectUriCustomizerImpl(
     ): String {
         var redirectUri = redirectUri
 
+        log.info(
+            "[AuthorizationCodeRedirectUriCustomizerImpl] -> customizeRedirectUri: redirectUri=$redirectUri, " +
+                "passQueryParams=${config.passQueryParams}",
+        )
         config.passQueryParams.forEach { param ->
             call.request.queryParameters[param]?.let { value ->
                 redirectUri += "&$param=$value"
+                log.info("[AuthorizationCodeRedirectUriCustomizerImpl] -> customizeRedirectUri: Adding query parameter - $param=$value")
             }
         }
+        log.info("[AuthorizationCodeRedirectUriCustomizerImpl] -> customizeRedirectUri: Final redirectUri=$redirectUri")
 
         return redirectUri
     }
