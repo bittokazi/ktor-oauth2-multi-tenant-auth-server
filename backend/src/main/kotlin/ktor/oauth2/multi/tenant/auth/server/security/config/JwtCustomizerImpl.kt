@@ -6,6 +6,7 @@ import com.nimbusds.jwt.JWTClaimsSet
 import io.ktor.server.application.ApplicationCall
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.RoleEnum
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.ScopeEnum
+import ktor.oauth2.multi.tenant.auth.server.persistence.repository.NonceMapRepository
 import ktor.oauth2.multi.tenant.auth.server.persistence.repository.UserRepository
 import ktor.oauth2.multi.tenant.auth.server.security.entity.RoleScopeConfiguration
 import ktor.oauth2.multi.tenant.auth.server.utils.Utils
@@ -14,6 +15,7 @@ import kotlin.collections.joinToString
 class JwtCustomizerImpl(
     private val userRepository: UserRepository,
     private val extraTokenClaimConfig: ExtraTokenClaimConfig,
+    private val nonceMapRepository: NonceMapRepository,
 ) : JwtTokenCustomizer {
     override fun customize(
         user: String?,
@@ -58,6 +60,13 @@ class JwtCustomizerImpl(
                     "scope" to scopes,
                     "username" to userDto!!.email,
                 )
+
+            call.parameters["code"]?.let { code ->
+                nonceMapRepository.findByCode(code, call)?.let { nonceMap ->
+                    payload["nonce"] = nonceMap.nonce
+                    nonceMapRepository.deleteByCode(code, call)
+                }
+            }
 
             payload +=
                 mapOf(
