@@ -1,4 +1,4 @@
-package ktor.oauth2.multi.tenant.auth.server.security.config
+package ktor.oauth2.multi.tenant.auth.server.security.plugins
 
 import com.bittokazi.ktor.auth.utils.getBaseUrl
 import io.ktor.http.HttpStatusCode
