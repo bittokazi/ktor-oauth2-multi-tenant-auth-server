@@ -43,9 +43,10 @@ import ktor.oauth2.multi.tenant.auth.server.security.config.OauthConfig
 import ktor.oauth2.multi.tenant.auth.server.security.config.OauthTemplateCustomizerImpl
 import ktor.oauth2.multi.tenant.auth.server.security.config.OidcUserInfoCustomizerImpl
 import ktor.oauth2.multi.tenant.auth.server.security.config.SessionExtenderImpl
-import ktor.oauth2.multi.tenant.auth.server.security.config.tenantInterceptorPlugin
 import ktor.oauth2.multi.tenant.auth.server.security.controllers.otpRoute
 import ktor.oauth2.multi.tenant.auth.server.security.database.OauthDatabaseConfigurationImpl
+import ktor.oauth2.multi.tenant.auth.server.security.plugins.authorizationCodeRequestPlugin
+import ktor.oauth2.multi.tenant.auth.server.security.plugins.tenantInterceptorPlugin
 import ktor.oauth2.multi.tenant.auth.server.security.services.DefaultTwoFaService
 import ktor.oauth2.multi.tenant.auth.server.security.services.LoginService
 import ktor.oauth2.multi.tenant.auth.server.security.services.OauthUserServiceImpl
@@ -62,6 +63,8 @@ fun Application.configureSecurityModule() {
     val tenantRepository: TenantRepository by dependencies
 
     if (oauthConfig.enabled) {
+        install(authorizationCodeRequestPlugin)
+
         dependencies {
             provide<OauthDatabaseConfiguration>(OauthDatabaseConfigurationImpl::class)
             provide<OauthClientService>(OauthClientServiceDatabaseProvider::class)

@@ -9,6 +9,7 @@ import ktor.oauth2.multi.tenant.auth.server.persistence.entity.ScopeEnum
 import ktor.oauth2.multi.tenant.auth.server.persistence.repository.NonceMapRepository
 import ktor.oauth2.multi.tenant.auth.server.persistence.repository.UserRepository
 import ktor.oauth2.multi.tenant.auth.server.security.entity.RoleScopeConfiguration
+import ktor.oauth2.multi.tenant.auth.server.security.plugins.AuthorizationCodeAttributeKey
 import ktor.oauth2.multi.tenant.auth.server.utils.Utils
 import kotlin.collections.joinToString
 
@@ -61,7 +62,7 @@ class JwtCustomizerImpl(
                     "username" to userDto!!.email,
                 )
 
-            call.parameters["code"]?.let { code ->
+            call.attributes.getOrNull(AuthorizationCodeAttributeKey)?.let { code ->
                 nonceMapRepository.findByCode(code, call)?.let { nonceMap ->
                     payload["nonce"] = nonceMap.nonce
                     nonceMapRepository.deleteByCode(code, call)
