@@ -1,5 +1,6 @@
 package ktor.oauth2.multi.tenant.auth.server.security.config
 
+import com.bittokazi.ktor.auth.domains.token.TokenType
 import com.bittokazi.ktor.auth.services.JwtTokenCustomizer
 import com.bittokazi.ktor.auth.services.providers.OAuthClientDTO
 import com.nimbusds.jwt.JWTClaimsSet
@@ -23,8 +24,9 @@ class JwtCustomizerImpl(
         claims: JWTClaimsSet.Builder,
         call: ApplicationCall?,
         params: Map<String, String?>,
+        tokenType: TokenType,
     ): Map<String, Any> {
-        if (user != null) {
+        if (user != null && (tokenType == TokenType.ACCESS_TOKEN || tokenType == TokenType.ID_TOKEN)) {
             val userDto = userRepository.findOneById(user, call = call!!)
 
             var scopes =
@@ -62,10 +64,12 @@ class JwtCustomizerImpl(
                     "username" to userDto!!.email,
                 )
 
-            params["code"]?.let { code ->
-                nonceMapRepository.findByCode(code, call)?.let { nonceMap ->
-                    payload["nonce"] = nonceMap.nonce
-                    nonceMapRepository.deleteByCode(code, call)
+            if (tokenType == TokenType.ID_TOKEN) {
+                params["code"]?.let { code ->
+                    nonceMapRepository.findByCode(code, call)?.let { nonceMap ->
+                        payload["nonce"] = nonceMap.nonce
+                        nonceMapRepository.deleteByCode(code, call)
+                    }
                 }
             }
 

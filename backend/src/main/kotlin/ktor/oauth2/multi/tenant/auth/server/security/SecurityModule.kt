@@ -3,7 +3,6 @@ package ktor.oauth2.multi.tenant.auth.server.security
 import com.bittokazi.ktor.auth.configureOauth2AuthorizationServer
 import com.bittokazi.ktor.auth.database.OauthDatabaseConfiguration
 import com.bittokazi.ktor.auth.oauthAuthenticationConfig
-import com.bittokazi.ktor.auth.services.JwksProvider
 import com.bittokazi.ktor.auth.services.JwtTokenCustomizer
 import com.bittokazi.ktor.auth.services.JwtVerifier
 import com.bittokazi.ktor.auth.services.SessionCustomizer
@@ -34,6 +33,7 @@ import io.ktor.server.plugins.requestvalidation.RequestValidation
 import ktor.oauth2.multi.tenant.auth.server.persistence.repository.TenantRepository
 import ktor.oauth2.multi.tenant.auth.server.security.config.AuthorizationCodeRedirectUriCustomizerConfig
 import ktor.oauth2.multi.tenant.auth.server.security.config.AuthorizationCodeRedirectUriCustomizerImpl
+import ktor.oauth2.multi.tenant.auth.server.security.config.CustomAuthenticatedUserSession
 import ktor.oauth2.multi.tenant.auth.server.security.config.ExtraTokenClaimConfig
 import ktor.oauth2.multi.tenant.auth.server.security.config.IssuerProviderImpl
 import ktor.oauth2.multi.tenant.auth.server.security.config.JwtCustomizerImpl
@@ -81,11 +81,10 @@ fun Application.configureSecurityModule() {
             provide<OauthDeviceCodeService>(OauthDeviceCodeServiceDatabaseProvider::class)
 
             provide<JwtTokenCustomizer>(JwtCustomizerImpl::class)
-            provide(JwksProvider::class)
             provide(JwtVerifier::class)
             provide(SessionCustomizer::class)
             provide<TemplateCustomizer>(OauthTemplateCustomizerImpl::class)
-            provide<OauthLoginOptionService>(LoginOptionServiceImpl::class)
+            provide<OauthLoginOptionService<CustomAuthenticatedUserSession>>(LoginOptionServiceImpl::class)
             provide<OauthLogoutActionService>(LogoutActionCustomizerImpl::class)
 
             provide<SessionExtender>(SessionExtenderImpl::class)
