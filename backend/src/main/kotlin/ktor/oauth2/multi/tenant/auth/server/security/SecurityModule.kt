@@ -34,7 +34,6 @@ import io.ktor.server.plugins.requestvalidation.RequestValidation
 import ktor.oauth2.multi.tenant.auth.server.persistence.repository.TenantRepository
 import ktor.oauth2.multi.tenant.auth.server.security.config.AuthorizationCodeRedirectUriCustomizerConfig
 import ktor.oauth2.multi.tenant.auth.server.security.config.AuthorizationCodeRedirectUriCustomizerImpl
-import ktor.oauth2.multi.tenant.auth.server.security.config.CustomAuthenticatedUserSession
 import ktor.oauth2.multi.tenant.auth.server.security.config.ExtraTokenClaimConfig
 import ktor.oauth2.multi.tenant.auth.server.security.config.IssuerProviderImpl
 import ktor.oauth2.multi.tenant.auth.server.security.config.JwtCustomizerImpl
