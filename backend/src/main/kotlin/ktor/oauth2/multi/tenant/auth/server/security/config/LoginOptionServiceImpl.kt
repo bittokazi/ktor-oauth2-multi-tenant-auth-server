@@ -1,6 +1,7 @@
 package ktor.oauth2.multi.tenant.auth.server.security.config
 
 import com.bittokazi.ktor.auth.OauthUserSession
+import com.bittokazi.ktor.auth.services.providers.AuthenticatedUserSession
 import com.bittokazi.ktor.auth.services.providers.OauthLoginOptionService
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.response.respondRedirect
@@ -15,17 +16,22 @@ import ktor.oauth2.multi.tenant.auth.server.persistence.repository.UserTrustedDe
 import ktor.oauth2.multi.tenant.auth.server.security.entity.OauthRedirectUrlSession
 import ktor.oauth2.multi.tenant.auth.server.security.entity.UserTwoFaSession
 
+data class CustomAuthenticatedUserSession(
+    override val loginCompleted: Boolean,
+    val action: suspend () -> Unit,
+) : AuthenticatedUserSession
+
 class LoginOptionServiceImpl(
     val userTrustedDeviceRepository: UserTrustedDeviceRepository,
     val userRepository: UserRepository,
     val tenantRepository: TenantRepository,
-) : OauthLoginOptionService {
+) : OauthLoginOptionService<AuthenticatedUserSession> {
     override val fallbackAfterLoginRedirectUrl: String = "/app/dashboard"
 
     override suspend fun isAfterLoginCheckCompleted(
         oauthUserSession: OauthUserSession,
         call: ApplicationCall,
-    ): Boolean {
+    ): CustomAuthenticatedUserSession {
         return when (val session = call.sessions.get<UserTwoFaSession>()) {
             null -> {
                 val user = userRepository.findOneById(oauthUserSession.userId, false, call)
@@ -41,30 +47,49 @@ class LoginOptionServiceImpl(
                                 // Trusted device found — set session and proceed
                                 val newSession = UserTwoFaSession(user.id.toString(), user.email)
                                 call.sessions.set(newSession)
-                                return true
+                                CustomAuthenticatedUserSession(loginCompleted = true) { }
                             }
                         }
 
                         // No trusted device — redirect to otp check
-                        call.respondRedirect("/oauth/otp-check")
-                        false
+                        CustomAuthenticatedUserSession(
+                            loginCompleted = false,
+                        ) {
+                            call.respondRedirect("/oauth/otp-check")
+                        }
                     }
                     else -> {
                         val session = UserTwoFaSession(user?.id.toString(), user!!.email)
                         call.sessions.set(session)
-                        true
+                        CustomAuthenticatedUserSession(loginCompleted = true) { }
                     }
                 }
             }
             else -> {
                 when (session.userId == oauthUserSession.userId) {
-                    true -> true
+                    true -> CustomAuthenticatedUserSession(loginCompleted = true) { }
                     else -> {
-                        call.sessions.clear("USER_TWO_FA_SESSION")
-                        call.respondRedirect("/oauth/otp-check")
-                        false
+                        CustomAuthenticatedUserSession(
+                            loginCompleted = false,
+                        ) {
+                            call.sessions.clear("USER_TWO_FA_SESSION")
+                            call.respondRedirect("/oauth/otp-check")
+                        }
                     }
                 }
+            }
+        }
+    }
+
+    override suspend fun onGoingLogin(
+        oauthUserSession: OauthUserSession,
+        payload: AuthenticatedUserSession,
+        call: ApplicationCall,
+    ) {
+        when (payload) {
+            is CustomAuthenticatedUserSession -> payload.action()
+            else -> {
+
             }
         }
     }

@@ -98,6 +98,8 @@ class DefaultTwoFaService(
                                 false -> {
                                     when (validate2FA(twoFASecretPayload.code!!, twoFASecretPayload.secret!!)) {
                                         true -> {
+                                            userTwoFaSecretRepository.delete(user.id, call)
+                                            userTrustedDeviceRepository.deleteAllByUserId(user.id, call)
                                             userTwoFaSecretRepository.insert(
                                                 UserTwoFaSecretData(
                                                     user = user,
