@@ -89,7 +89,6 @@ class LoginOptionServiceImpl(
         when (payload) {
             is CustomAuthenticatedUserSession -> payload.action()
             else -> {
-
             }
         }
     }

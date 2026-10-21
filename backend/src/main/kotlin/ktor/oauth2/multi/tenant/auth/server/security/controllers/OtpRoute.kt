@@ -36,7 +36,6 @@ import ktor.oauth2.multi.tenant.auth.server.persistence.entity.ScopeEnum
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.UserData
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.UserTrustedDeviceData
 import ktor.oauth2.multi.tenant.auth.server.persistence.repository.UserRepository
-import ktor.oauth2.multi.tenant.auth.server.security.config.CustomAuthenticatedUserSession
 import ktor.oauth2.multi.tenant.auth.server.security.entity.TwoFASecretPayload
 import ktor.oauth2.multi.tenant.auth.server.security.entity.UserTwoFaSession
 import ktor.oauth2.multi.tenant.auth.server.security.services.TwoFaService
