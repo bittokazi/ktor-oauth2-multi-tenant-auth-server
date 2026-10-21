@@ -2,6 +2,7 @@ package ktor.oauth2.multi.tenant.auth.server.security.controllers
 
 import com.bittokazi.ktor.auth.OauthUserSession
 import com.bittokazi.ktor.auth.services.TemplateCustomizerFactory
+import com.bittokazi.ktor.auth.services.providers.AuthenticatedUserSession
 import com.bittokazi.ktor.auth.services.providers.OauthLoginOptionService
 import com.bittokazi.ktor.auth.services.userSessionCheck
 import com.bittokazi.ktor.auth.utils.respondMustache
@@ -35,6 +36,7 @@ import ktor.oauth2.multi.tenant.auth.server.persistence.entity.ScopeEnum
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.UserData
 import ktor.oauth2.multi.tenant.auth.server.persistence.entity.UserTrustedDeviceData
 import ktor.oauth2.multi.tenant.auth.server.persistence.repository.UserRepository
+import ktor.oauth2.multi.tenant.auth.server.security.config.CustomAuthenticatedUserSession
 import ktor.oauth2.multi.tenant.auth.server.security.entity.TwoFASecretPayload
 import ktor.oauth2.multi.tenant.auth.server.security.entity.UserTwoFaSession
 import ktor.oauth2.multi.tenant.auth.server.security.services.TwoFaService
@@ -47,7 +49,7 @@ import org.slf4j.LoggerFactory
 fun Application.otpRoute() {
     val log: Logger = LoggerFactory.getLogger(javaClass)
 
-    val oauthLoginOptionService: OauthLoginOptionService by dependencies
+    val oauthLoginOptionService: OauthLoginOptionService<AuthenticatedUserSession> by dependencies
     val twoFaService: TwoFaService by dependencies
     val userRepository: UserRepository by dependencies
     val templateCustomizerFactory: TemplateCustomizerFactory by dependencies

@@ -25,7 +25,7 @@ class LoginOptionServiceImpl(
     val userTrustedDeviceRepository: UserTrustedDeviceRepository,
     val userRepository: UserRepository,
     val tenantRepository: TenantRepository,
-) : OauthLoginOptionService<CustomAuthenticatedUserSession> {
+) : OauthLoginOptionService<AuthenticatedUserSession> {
     override val fallbackAfterLoginRedirectUrl: String = "/app/dashboard"
 
     override suspend fun isAfterLoginCheckCompleted(
@@ -83,10 +83,15 @@ class LoginOptionServiceImpl(
 
     override suspend fun onGoingLogin(
         oauthUserSession: OauthUserSession,
-        payload: CustomAuthenticatedUserSession,
+        payload: AuthenticatedUserSession,
         call: ApplicationCall,
     ) {
-        payload.action()
+        when (payload) {
+            is CustomAuthenticatedUserSession -> payload.action()
+            else -> {
+
+            }
+        }
     }
 
     override suspend fun onSuccessfulLogin(

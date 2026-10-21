@@ -12,6 +12,7 @@ import com.bittokazi.ktor.auth.services.TemplateCustomizerFactory
 import com.bittokazi.ktor.auth.services.authorization.AuthorizationCodeRedirectUriCustomizer
 import com.bittokazi.ktor.auth.services.issuer.IssuerProvider
 import com.bittokazi.ktor.auth.services.oidc.OidcUserInfoCustomizer
+import com.bittokazi.ktor.auth.services.providers.AuthenticatedUserSession
 import com.bittokazi.ktor.auth.services.providers.OauthAuthorizationCodeService
 import com.bittokazi.ktor.auth.services.providers.OauthClientService
 import com.bittokazi.ktor.auth.services.providers.OauthConsentService
@@ -84,7 +85,7 @@ fun Application.configureSecurityModule() {
             provide(JwtVerifier::class)
             provide(SessionCustomizer::class)
             provide<TemplateCustomizer>(OauthTemplateCustomizerImpl::class)
-            provide<OauthLoginOptionService<CustomAuthenticatedUserSession>>(LoginOptionServiceImpl::class)
+            provide<OauthLoginOptionService<AuthenticatedUserSession>>(LoginOptionServiceImpl::class)
             provide<OauthLogoutActionService>(LogoutActionCustomizerImpl::class)
 
             provide<SessionExtender>(SessionExtenderImpl::class)
